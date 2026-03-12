@@ -209,6 +209,15 @@
           background-color: var(--background-hover);
         }
       }
+
+      .ratio-high {
+        color: var(--color-error-60);
+        font-weight: var(--font-weight-semibold);
+      }
+
+      .ratio-normal {
+        color: var(--text-primary);
+      }
     }
   }
 }

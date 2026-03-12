@@ -19,8 +19,9 @@ import {
   Toggle,
   Select,
   SelectItem,
+  Tag,
 } from '@carbon/react';
-import { ArrowRight, Growth, CheckmarkFilled } from '@carbon/icons-react';
+import { ArrowRight, Growth, CheckmarkFilled, ChevronRight } from '@carbon/icons-react';
 import { LineChart, SimpleBarChart } from '@carbon/charts-react';
 import '@carbon/charts-react/styles.css';
 import { getMonthlyData, getAssetData, calculateYTDStats } from '../../data/financialMockData';
@@ -88,17 +89,17 @@ export default function ConservativeDashboard() {
     },
   };
 
-  // Table headers
+  // Table headers - adapted from Modern dashboard portfolio table
   const tableHeaders = [
-    { key: 'assetName', header: 'Asset ID/Name' },
-    { key: 'assetCategory', header: 'Category' },
-    { key: 'premiumDue', header: 'Premium Due' },
+    { key: 'assetName', header: 'Asset' },
+    { key: 'assetCategory', header: 'Type' },
+    { key: 'premiumDue', header: 'Next Premium' },
     { key: 'dueDate', header: 'Due Date' },
-    { key: 'totalClaims', header: 'Total Claims' },
-    { key: 'actions', header: '' },
+    { key: 'totalClaims', header: 'Claims' },
+    { key: 'lossRatio', header: 'Loss Ratio' },
   ];
 
-  // Format table rows
+  // Format table rows with loss ratio calculation
   const tableRows = paginatedAssets.map(asset => ({
     id: asset.id,
     assetName: asset.assetName,
@@ -106,6 +107,7 @@ export default function ConservativeDashboard() {
     premiumDue: `$${asset.premiumDue.toLocaleString()}`,
     dueDate: new Date(asset.dueDate).toLocaleDateString(),
     totalClaims: `$${asset.totalClaims.toLocaleString()}`,
+    lossRatio: ((asset.totalClaims / asset.coverageAmount) * 100).toFixed(1),
   }));
 
   const formatCurrency = (value) => `$${value.toLocaleString()}`;
@@ -267,7 +269,7 @@ export default function ConservativeDashboard() {
                     </TableToolbarContent>
                   </TableToolbar>
                   
-                  <Table {...getTableProps()}>
+                  <Table {...getTableProps()} size="md">
                     <TableHead>
                       <TableRow>
                         {headers.map((header) => (
@@ -275,6 +277,7 @@ export default function ConservativeDashboard() {
                             {header.header}
                           </TableHeader>
                         ))}
+                        <TableHeader />
                       </TableRow>
                     </TableHead>
                     <TableBody>
@@ -286,21 +289,38 @@ export default function ConservativeDashboard() {
                           className="clickable-row"
                         >
                           {row.cells.map((cell) => {
-                            if (cell.info.header === 'actions') {
+                            if (cell.info.header === 'assetCategory') {
                               return (
                                 <TableCell key={cell.id}>
-                                  <Button
-                                    kind="ghost"
+                                  <Tag
+                                    type={cell.value === 'Property' ? 'blue' : 'green'}
                                     size="sm"
-                                    renderIcon={ArrowRight}
-                                    iconDescription="View Details"
-                                    hasIconOnly
-                                  />
+                                  >
+                                    {cell.value}
+                                  </Tag>
+                                </TableCell>
+                              );
+                            }
+                            if (cell.info.header === 'lossRatio') {
+                              return (
+                                <TableCell key={cell.id}>
+                                  <span className={parseFloat(cell.value) > 30 ? 'ratio-high' : 'ratio-normal'}>
+                                    {cell.value}%
+                                  </span>
                                 </TableCell>
                               );
                             }
                             return <TableCell key={cell.id}>{cell.value}</TableCell>;
                           })}
+                          <TableCell>
+                            <Button
+                              kind="ghost"
+                              size="sm"
+                              renderIcon={ChevronRight}
+                              iconDescription="View Details"
+                              hasIconOnly
+                            />
+                          </TableCell>
                         </TableRow>
                       ))}
                     </TableBody>
