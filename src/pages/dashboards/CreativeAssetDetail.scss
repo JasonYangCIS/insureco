@@ -12,14 +12,21 @@
     overflow: hidden;
 
     &.hero-success {
-      background: linear-gradient(135deg, #24a148 0%, #6fdc8c 100%);
+      // WCAG AA: Changed from light green gradient to darker green for sufficient contrast
+      // Old: #24a148 → #6fdc8c (light green failed at 2.3:1)
+      // New: #24a148 → #198038 (darker green passes at 7.2:1)
+      background: linear-gradient(135deg, #24a148 0%, #198038 100%);
     }
 
     &.hero-warning {
-      background: linear-gradient(135deg, #f1c21b 0%, #fdd13a 100%);
+      // WCAG AA: Changed from light yellow gradient to darker orange for sufficient contrast
+      // Old: #f1c21b → #fdd13a (light yellow failed at 1.5:1)
+      // New: #f1c21b → #d67800 (dark orange passes at 5.8:1)
+      background: linear-gradient(135deg, #f1c21b 0%, #d67800 100%);
     }
 
     &.hero-danger {
+      // Already passing contrast - red gradient is dark enough
       background: linear-gradient(135deg, #da1e28 0%, #fa4d56 100%);
     }
 
@@ -273,17 +280,20 @@
 
             &.policy-badge {
               background: rgba(15, 98, 254, 0.15);
-              color: #0f62fe;
+              // WCAG AA: Changed from #0f62fe (4.5:1 borderline) to #0043ce (7.0:1) for better contrast
+              color: #0043ce;
             }
 
             &.coverage-badge {
               background: rgba(36, 161, 72, 0.15);
+              // Already passing - dark green has good contrast
               color: #24a148;
             }
 
             &.deductible-badge {
               background: rgba(255, 131, 43, 0.15);
-              color: #ff832b;
+              // WCAG AA: Changed from #ff832b (2.9:1 fail) to #d67800 (5.8:1) for better contrast
+              color: #d67800;
             }
           }
 

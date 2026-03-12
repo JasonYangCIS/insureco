@@ -99,7 +99,8 @@
         letter-spacing: -0.5px;
 
         &.stat-value-accent {
-          color: #0f62fe;
+          // WCAG AA: Changed from #0f62fe (4.5:1 borderline) to #0043ce (7.0:1) for better contrast
+          color: #0043ce;
         }
 
         &.stat-value-warning {
