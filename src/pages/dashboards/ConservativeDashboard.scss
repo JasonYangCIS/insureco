@@ -201,6 +201,19 @@
         margin: 0 0 var(--spacing-05);
       }
 
+      // Align toolbar items (search + dropdown) to the same height
+      .cds--toolbar-content {
+        align-items: center;
+
+        .cds--select {
+          margin: 0;
+
+          .cds--select-input__wrapper {
+            height: 2rem; // Match sm size search bar height
+          }
+        }
+      }
+
       .clickable-row {
         cursor: pointer;
         transition: background-color var(--motion-hover);

@@ -37,12 +37,23 @@ export default function ConservativeDashboard() {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(20);
   const [filterCategory, setFilterCategory] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
 
-  // Filter assets by category
+  // Filter assets by category and search query
   const filteredAssets = useMemo(() => {
-    if (filterCategory === 'all') return assetData;
-    return assetData.filter(asset => asset.assetCategory.toLowerCase() === filterCategory);
-  }, [assetData, filterCategory]);
+    let result = assetData;
+    if (filterCategory !== 'all') {
+      result = result.filter(asset => asset.assetCategory.toLowerCase() === filterCategory);
+    }
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      result = result.filter(asset =>
+        asset.assetName.toLowerCase().includes(query) ||
+        asset.assetCategory.toLowerCase().includes(query)
+      );
+    }
+    return result;
+  }, [assetData, filterCategory, searchQuery]);
 
   // Paginate assets
   const paginatedAssets = useMemo(() => {
@@ -251,10 +262,18 @@ export default function ConservativeDashboard() {
                 <div {...getTableContainerProps()}>
                   <TableToolbar>
                     <TableToolbarContent>
-                      <TableToolbarSearch placeholder="Search assets..." persistent />
+                      <TableToolbarSearch
+                        placeholder="Search assets..."
+                        persistent
+                        onChange={(e) => {
+                          setSearchQuery(e.target.value);
+                          setPage(1);
+                        }}
+                      />
                       <Select
                         id="category-filter"
                         labelText="Filter by Category"
+                        hideLabel
                         value={filterCategory}
                         onChange={(e) => {
                           setFilterCategory(e.target.value);
