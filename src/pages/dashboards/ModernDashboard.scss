@@ -169,7 +169,12 @@
       overflow: hidden;
 
       .tab-content {
-        padding: var(--spacing-06);
+        // Mobile: reduced padding
+        padding: var(--spacing-04);
+
+        @media (min-width: 42rem) {
+          padding: var(--spacing-06);
+        }
       }
 
       .section-heading {
@@ -177,6 +182,11 @@
         font-weight: var(--font-weight-semibold);
         color: var(--text-primary);
         margin: 0 0 var(--spacing-05);
+
+        // Mobile: smaller heading
+        @media (max-width: 42rem) {
+          font-size: var(--font-size-16);
+        }
       }
 
       .chart-section-modern {
@@ -184,6 +194,23 @@
         padding: var(--spacing-05);
         background: var(--background-secondary);
         border-radius: var(--radius-md);
+        // Mobile: enable horizontal scroll for chart overflow
+        overflow-x: auto;
+        overflow-y: visible;
+        -webkit-overflow-scrolling: touch;
+
+        @media (min-width: 42rem) {
+          overflow-x: visible;
+        }
+
+        // Ensure chart has minimum width on mobile
+        > div {
+          min-width: 500px;
+
+          @media (min-width: 42rem) {
+            min-width: auto;
+          }
+        }
       }
 
       .table-section-modern {

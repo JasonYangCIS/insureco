@@ -125,33 +125,64 @@
     }
 
     .chart-container {
-      padding: var(--spacing-06);
+      // Mobile: reduced padding
+      padding: var(--spacing-04);
       background: var(--background-primary);
       border: 1px solid var(--border-subtle);
+
+      @media (min-width: 42rem) {
+        padding: var(--spacing-06);
+      }
 
       .chart-toolbar {
         display: flex;
         justify-content: space-between;
         align-items: center;
         margin-bottom: var(--spacing-05);
+        flex-wrap: wrap;
+        gap: var(--spacing-03);
 
         .chart-title {
           font-size: var(--heading-h4-size);
           font-weight: var(--font-weight-semibold);
           color: var(--text-primary);
           margin: 0;
+
+          // Mobile: smaller title
+          @media (max-width: 42rem) {
+            font-size: var(--font-size-16);
+          }
         }
 
         .chart-controls {
           display: flex;
           gap: var(--spacing-04);
           align-items: center;
+          flex-wrap: wrap;
         }
       }
 
       .chart-wrapper {
         width: 100%;
-        min-height: 400px;
+        min-height: 300px;
+        // Mobile: enable horizontal scroll for chart overflow
+        overflow-x: auto;
+        overflow-y: visible;
+        -webkit-overflow-scrolling: touch; // Smooth scrolling on iOS
+
+        @media (min-width: 42rem) {
+          min-height: 400px;
+          overflow-x: visible;
+        }
+
+        // Ensure chart canvas has minimum width on mobile
+        > div {
+          min-width: 500px; // Prevent chart from being too compressed
+
+          @media (min-width: 42rem) {
+            min-width: auto;
+          }
+        }
       }
     }
   }
