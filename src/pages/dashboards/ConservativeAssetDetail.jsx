@@ -46,7 +46,7 @@ export default function ConservativeAssetDetail() {
             <Tile>
               <h2>Asset Not Found</h2>
               <p>The requested asset could not be found.</p>
-              <Button onClick={() => navigate('/dashboard-conservative')}>
+              <Button onClick={() => navigate('/analytics')}>
                 Back to Dashboard
               </Button>
             </Tile>
@@ -99,7 +99,7 @@ export default function ConservativeAssetDetail() {
           <Button
             kind="ghost"
             renderIcon={ArrowLeft}
-            onClick={() => navigate('/dashboard-conservative')}
+            onClick={() => navigate('/analytics')}
             className="back-button"
           >
             Back to Dashboard

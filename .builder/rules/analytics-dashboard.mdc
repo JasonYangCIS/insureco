@@ -1,0 +1,223 @@
+---
+description: Financial Analytics Dashboard - architecture, patterns, audit results and conventions
+globs:
+  - src/pages/dashboards/**
+  - src/data/financialMockData.js
+alwaysApply: false
+---
+
+# Financial Analytics Dashboard
+
+## Overview
+
+The Insurance Financial Analytics Dashboard (IFAD) is a single, production-grade dashboard for reviewing insurance portfolio performance. It was selected from three prototypes (Conservative, Modern, Creative) — **the Conservative design was chosen**.
+
+**Routes:**
+- `/analytics` — main dashboard (`ConservativeDashboard.jsx`)
+- `/analytics/:assetId` — asset drill-down detail (`ConservativeAssetDetail.jsx`)
+- `/dashboard-conservative` and `/dashboards` → redirect to `/analytics` (legacy)
+
+---
+
+## File Structure
+
+
+src/
+├── pages/dashboards/
+│   ├── ConservativeDashboard.jsx     ← Main dashboard page
+│   ├── ConservativeDashboard.scss    ← Dashboard styles
+│   ├── ConservativeAssetDetail.jsx   ← Asset drill-down detail page
+│   └── ConservativeAssetDetail.scss  ← Detail page styles
+└── data/
+    └── financialMockData.js          ← All mock data generation and utilities
+```
+
+---
+
+## Data Layer — `financialMockData.js`
+
+All data is **mock/generated** — no external API calls. Singleton caches prevent regeneration on re-render.
+
+### Exports
+
+| Export | Returns | Description |
+|--------|---------|-------------|
+| `getMonthlyData()` | `MonthlyRecord[]` | Last 12 months of premiums/claims, cached |
+| `getAssetData()` | `Asset[]` | 25 assets (10 Property, 15 Auto), cached |
+| `getAssetById(id)` | `Asset \| undefined` | Lookup single asset by ID |
+| `calculateYTDStats(monthly, assets)` | `YTDStats` | YTD aggregates + loss ratio |
+| `generateClaimHistory(assetId, category)` | `Claim[]` | 0–4 claims per asset |
+| `generatePolicyDocuments(assetId)` | `PolicyDoc[]` | 3 static docs per asset |
+
+### Asset ID Format
+- Property: `PROP-0001` through `PROP-0010`
+- Auto: `AUTO-0011` through `AUTO-0025`
+
+### Data Shape
+
+```javascript
+// Asset
+{
+  id: 'PROP-0001',
+  assetName: '123 Maple St Warehouse',
+  assetCategory: 'Property' | 'Auto',
+  location: 'Portland, OR',      // null for Auto
+  vin: 'ABC123...',              // only on Auto assets
+  premiumDue: 4200,
+  dueDate: '2025-06-15',
+  totalClaims: 18500,
+  policyNumber: 'P000123',
+  coverageAmount: 2000000,
+  deductible: 10000,
+}
+
+// MonthlyRecord
+{
+  month: 'Jan',
+  year: 2025,
+  monthYear: 'Jan 2025',
+  propertyPremiums: 87000,
+  propertyClaims: 59160,
+  autoPremiums: 66500,
+  autoClaims: 47880,
+}
+```
+
+---
+
+## Dashboard Architecture — `ConservativeDashboard.jsx`
+
+### State
+
+| State | Type | Purpose |
+|-------|------|---------|
+| `chartType` | `'line' \| 'bar'` | Toggled chart type |
+| `page` | number | Current pagination page |
+| `pageSize` | number | Rows per page (default 20) |
+| `filterCategory` | `'all' \| 'property' \| 'auto'` | Category dropdown filter |
+| `searchQuery` | string | Search input (raw) |
+
+### Key Patterns
+
+**Module-level constants** — `TABLE_HEADERS`, `BASE_CHART_OPTIONS`, `CHART_COLOR_SCALE` are defined outside the component to avoid object recreation on every render.
+
+**Sanitized search** — `searchQuery` is sanitized via `sanitizeInput()` before use in filter logic. `sanitizedSearch` is computed with `useMemo` and placed before `filteredAssets` in the file to avoid temporal dead zone errors.
+
+**Memoization chain:**
+```
+monthlyData → chartData
+assetData   → categoryCounts
+            → filteredAssets (depends on filterCategory + sanitizedSearch)
+              → paginatedAssets (depends on page + pageSize)
+                → tableRows
+```
+
+**Stable callbacks** — `handleRowClick`, `handleRowKeyDown`, `handleSearch`, `handleCategoryChange`, `handlePaginationChange` are all wrapped in `useCallback`.
+
+**Keyboard navigation** — Table rows have `tabIndex={0}`, `role="button"`, and `onKeyDown` handlers so keyboard users can navigate with Tab + Enter/Space.
+
+---
+
+## Asset Detail Architecture — `ConservativeAssetDetail.jsx`
+
+- Reads `:assetId` from URL params (`useParams`)
+- Renders a "not found" fallback Tile if the ID doesn't match any asset
+- Sections: Policy Information, Claim Summary, Claim History table, Policy Documents list
+- Claim status → Carbon Tag type mapping via `getStatusTagType()` helper
+
+---
+
+## Styling Conventions
+
+- **Mobile-first**: base padding `var(--spacing-03)` (8px), scales to `var(--spacing-06)` (24px) at `42rem` (672px)
+- **Chart overflow**: `overflow-x: auto` with `min-width: 500px` on mobile, removed at tablet
+- **All tokens**: uses `var(--token-name)` from `src/styles/tokens/` — no hardcoded colors
+- **Visually hidden**: `.visually-hidden` utility class defined in `ConservativeDashboard.scss` for screen-reader-only text
+
+---
+
+## Carbon Components Used
+
+| Component | Source | Usage |
+|-----------|--------|-------|
+| `Grid`, `Column` | `@carbon/react` | Layout (all columns use `sm md lg` props) |
+| `Tile` | `@carbon/react` | KPI cards, chart container, table container |
+| `DataTable` + sub-components | `@carbon/react` | Asset ledger table |
+| `TableToolbar`, `TableToolbarSearch` | `@carbon/react` | Search (wired to `searchQuery` state) |
+| `Select`, `SelectItem` | `@carbon/react` | Category filter (`hideLabel` to align with search) |
+| `Toggle` | `@carbon/react` | Line/Bar chart type toggle |
+| `Pagination` | `@carbon/react` | 10/20/30/50 rows per page |
+| `Tag` | `@carbon/react` | Category badges (blue=Property, teal=Auto) |
+| `Button` | `@carbon/react` | ChevronRight row action, back button |
+| `StructuredListWrapper` | `@carbon/react` | Policy info key-value display |
+| `LineChart`, `SimpleBarChart` | `@carbon/charts-react` | Financial charts |
+| `Growth`, `CheckmarkFilled`, `ChevronRight`, `ArrowLeft`, `DocumentPdf`, `Download` | `@carbon/icons-react` | Icons |
+
+> ⚠️ Always verify Carbon exports exist before using them. See `carbon-dependency-verification.mdc`.
+
+---
+
+## Accessibility (WCAG 2.1 AA)
+
+### Implemented
+- KPI values use `aria-labelledby` pointing to their label element
+- KPI trend indicators use `role="status"`
+- Icons that are decorative use `aria-hidden="true"`
+- Chart wrapper uses `role="img"` with descriptive `aria-label`
+- Table rows: `tabIndex={0}`, `role="button"`, `aria-label`, `onKeyDown` (Enter + Space)
+- "Actions" column header uses `.visually-hidden` for screen readers
+- Loss ratio spans include `aria-label` with threshold context
+- `TableToolbarSearch` has explicit `aria-label`
+- Category `Select` has `aria-label` (label is visually hidden via `hideLabel`)
+- Heading hierarchy: `h1` → page title, `h2` → section headings (chart, table)
+
+### Chart Color Contrast (WCAG AA on white background)
+| Series | Color | Ratio |
+|--------|-------|-------|
+| Property Premiums | `#198038` (green-60) | 4.6:1 ✅ |
+| Property Claims | `#da1e28` (red-60) | 4.5:1 ✅ |
+| Auto Premiums | `#0043ce` (blue-70) | 7.0:1 ✅ |
+| Auto Claims | `#8a3800` (dark orange) | 5.8:1 ✅ |
+
+### Loss Ratio Threshold
+- `> 30%` → `.ratio-high` (`var(--color-error-60)`) — red, semibold
+- `≤ 30%` → `.ratio-normal` (`var(--text-primary)`) — standard text
+
+---
+
+## Security
+
+- **Input sanitization**: `sanitizeInput()` strips `< > " ' &` from search input before it is used in filter comparisons. Raw value is never rendered as HTML.
+- **Route params**: `assetId` from URL is used only to look up data from the in-memory mock array — no eval, no dangerouslySetInnerHTML, no external fetch.
+- **No user data persisted**: all data is ephemeral mock data; no localStorage, cookies, or API calls.
+- **XSS**: all user-provided values are passed to React's virtual DOM (not innerHTML), so React's built-in escaping applies.
+
+---
+
+## Performance
+
+- Data generators run once and cache via module-level variables (`monthlyDataCache`, `assetDataCache`)
+- All expensive derivations are wrapped in `useMemo`
+- Event handlers are stable via `useCallback`
+- `TABLE_HEADERS` and `BASE_CHART_OPTIONS` are module-level constants (not recreated per render)
+- `categoryCounts` is memoized to avoid two inline `filter()` calls in JSX
+
+---
+
+## Navigation
+
+Header has a top-level **"Analytics"** `HeaderMenuItem` linking to `/analytics`. No submenu needed — single dashboard.
+
+Side nav mirrors the same single entry under `HeaderSideNavItems`.
+
+---
+
+## Adding New Features — Checklist
+
+1. **New column in table**: add to `TABLE_HEADERS` constant and `tableRows` useMemo
+2. **New filter**: add state, include in `filteredAssets` useMemo dependency array, reset `page` to 1 on change
+3. **New chart**: verify the chart type exists in `@carbon/charts-react` (`cat node_modules/@carbon/charts-react/dist/index.d.ts`)
+4. **New icon**: verify in `node_modules/@carbon/icons-react/lib/` before importing
+5. **New route**: add to `src/App.jsx` under the `/analytics` block and update this doc
+6. **Styling**: use `var(--token-name)` tokens only — check `ThemePreviewPage` at `/theme-preview` for reference
+7. **Test both themes**: toggle dark mode in the header and verify contrast

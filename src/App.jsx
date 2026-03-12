@@ -20,15 +20,8 @@ import AddVehiclePage from "./pages/business/AddVehiclePage";
 import FileClaimPage from "./pages/business/FileClaimPage";
 import MakePaymentPage from "./pages/business/MakePaymentPage";
 import MapPage from "./pages/business/MapPage";
-
-// Financial Dashboard Prototypes
-import DashboardSelector from "./pages/dashboards/DashboardSelector";
 import ConservativeDashboard from "./pages/dashboards/ConservativeDashboard";
 import ConservativeAssetDetail from "./pages/dashboards/ConservativeAssetDetail";
-import ModernDashboard from "./pages/dashboards/ModernDashboard";
-import ModernAssetDetail from "./pages/dashboards/ModernAssetDetail";
-import CreativeDashboard from "./pages/dashboards/CreativeDashboard";
-import CreativeAssetDetail from "./pages/dashboards/CreativeAssetDetail";
 
 export default function App() {
   return (
@@ -58,14 +51,14 @@ export default function App() {
         <Route path="/business/file-claim" element={<FileClaimPage />} />
         <Route path="/business/make-payment" element={<MakePaymentPage />} />
 
-        {/* Financial Dashboard Prototypes */}
-        <Route path="/dashboards" element={<DashboardSelector />} />
-        <Route path="/dashboard-conservative" element={<ConservativeDashboard />} />
-        <Route path="/dashboard-conservative/:assetId" element={<ConservativeAssetDetail />} />
-        <Route path="/dashboard-modern" element={<ModernDashboard />} />
-        <Route path="/dashboard-modern/:assetId" element={<ModernAssetDetail />} />
-        <Route path="/dashboard-creative" element={<CreativeDashboard />} />
-        <Route path="/dashboard-creative/:assetId" element={<CreativeAssetDetail />} />
+        {/* Financial Analytics Dashboard */}
+        <Route path="/analytics" element={<ConservativeDashboard />} />
+        <Route path="/analytics/:assetId" element={<ConservativeAssetDetail />} />
+
+        {/* Legacy redirects */}
+        <Route path="/dashboards" element={<Navigate to="/analytics" replace />} />
+        <Route path="/dashboard-conservative" element={<Navigate to="/analytics" replace />} />
+        <Route path="/dashboard-conservative/:assetId" element={<Navigate to="/analytics" replace />} />
       </Routes>
     </Layout>
   );
