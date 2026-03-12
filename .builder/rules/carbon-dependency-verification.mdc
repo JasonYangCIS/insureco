@@ -1,0 +1,215 @@
+---
+description: Carbon Design System - Dependency Verification Guidelines
+alwaysApply: true
+---
+
+# Carbon Dependency Verification
+
+## ⚠️ Critical Rule: Always Verify Before Using
+
+**NEVER assume a Carbon component, icon, or chart type exists just because the name seems logical.**
+
+## Root Cause of Past Issues
+
+### The Problem
+
+When building the Financial Dashboard prototypes, multiple runtime errors occurred due to importing **non-existent exports** from Carbon packages:
+
+1. ❌ `TrendUp` - Doesn't exist in `@carbon/icons-react`
+2. ❌ `TrendDown` - Doesn't exist in `@carbon/icons-react`
+3. ❌ `BarChart` - Doesn't exist in `@carbon/charts-react`
+
+### Why This Happened
+
+**Assumption-based development**: I assumed these exports existed based on logical naming conventions without verifying the actual package exports.
+
+### The Impact
+
+- Multiple syntax errors during runtime
+- Dev server errors
+- Broken user experience
+- Required multiple debugging cycles
+
+## Correct Verification Process
+
+### Before Using ANY Carbon Export
+
+**Step 1: Check the actual package exports**
+
+
+# For Carbon Charts React
+cat node_modules/@carbon/charts-react/dist/index.d.ts
+
+# For Carbon Icons React  
+ls node_modules/@carbon/icons-react/lib/ | grep -i [SearchTerm]
+```
+
+**Step 2: Verify in TypeScript definitions or documentation**
+
+- Carbon Charts: Check `node_modules/@carbon/charts-react/dist/index.d.ts`
+- Carbon Icons: Browse `node_modules/@carbon/icons-react/lib/`
+- Carbon Components: Check `@carbon/react` exports
+
+**Step 3: Use only verified exports**
+
+## Correct Carbon Exports
+
+### @carbon/charts-react
+
+**Available Chart Components:**
+- ✅ `LineChart`
+- ✅ `SimpleBarChart` ← NOT `BarChart`
+- ✅ `GroupedBarChart`
+- ✅ `StackedBarChart`
+- ✅ `StackedAreaChart`
+- ✅ `AreaChart`
+- ✅ `DonutChart`
+- ✅ `PieChart`
+- ✅ `ScatterChart`
+- ✅ `BubbleChart`
+- ✅ `MeterChart`
+- ✅ `GaugeChart`
+- ✅ `RadarChart`
+- ✅ `HeatmapChart`
+- ✅ `TreemapChart`
+- ✅ `WordCloudChart`
+- ✅ `AlluvialChart`
+
+**Common Mistakes:**
+- ❌ `BarChart` → ✅ Use `SimpleBarChart`, `GroupedBarChart`, or `StackedBarChart`
+- ❌ `Graph` → ✅ Use specific chart types listed above
+
+### @carbon/icons-react
+
+**Total Icons Available:** 2,481 icons
+
+**Trend/Growth Icons:**
+- ✅ `Growth` ← Use this for positive trends
+- ✅ `ArrowUp` ← Alternative for up trends
+- ✅ `IncreaseLevel` ← Alternative for increases
+- ❌ `TrendUp` - DOESN'T EXIST
+- ❌ `TrendDown` - DOESN'T EXIST
+
+**Down/Decrease Icons:**
+- ✅ `ArrowDown`
+- ✅ `ChevronDown`
+- ✅ `CaretDown`
+- ✅ `CheckmarkFilled` ← Good for "normal/good" states
+
+**How to Search for Icons:**
+```bash
+# Search for specific pattern
+ls node_modules/@carbon/icons-react/lib/ | grep -i growth
+
+# Search for chart-related
+ls node_modules/@carbon/icons-react/lib/ | grep -i chart
+
+# Search for financial
+ls node_modules/@carbon/icons-react/lib/ | grep -E "(Money|Finance|Currency)"
+```
+
+**Official Icon Library:**
+- Recommended: Browse https://carbondesignsystem.com/guidelines/icons/library/
+- Or check `node_modules/@carbon/icons-react/lib/` directory
+
+### @carbon/react
+
+**Verification Method:**
+```bash
+# Check package exports
+cat node_modules/@carbon/react/package.json
+
+# Or import in code and let IDE autocomplete
+import { /* TypeScript will show available exports */ } from '@carbon/react';
+```
+
+## Fixes Applied
+
+### Issue 1: Non-existent Icons
+
+**Before (WRONG):**
+```javascript
+import { TrendUp, TrendDown } from '@carbon/icons-react';
+```
+
+**After (CORRECT):**
+```javascript
+import { Growth, CheckmarkFilled } from '@carbon/icons-react';
+```
+
+### Issue 2: Non-existent Chart Component
+
+**Before (WRONG):**
+```javascript
+import { BarChart } from '@carbon/charts-react';
+<BarChart data={chartData} options={chartOptions} />
+```
+
+**After (CORRECT):**
+```javascript
+import { SimpleBarChart } from '@carbon/charts-react';
+<SimpleBarChart data={chartData} options={chartOptions} />
+```
+
+### Issue 3: Duplicate React Imports
+
+**Before (WRONG):**
+```javascript
+import React, { useState } from 'react';
+import React, { useState } from 'react'; // Duplicate!
+```
+
+**After (CORRECT):**
+```javascript
+import React, { useState, useMemo } from 'react';
+```
+
+## Prevention Checklist
+
+Before writing code that uses Carbon dependencies:
+
+- [ ] Check TypeScript definitions or package exports
+- [ ] Verify icon names by searching `node_modules/@carbon/icons-react/lib/`
+- [ ] Use Carbon's official documentation for component names
+- [ ] Test imports in isolation before building full components
+- [ ] Search existing codebase for usage examples
+- [ ] When in doubt, browse the official Carbon website
+
+## Quick Verification Commands
+
+```bash
+# Verify a chart type exists
+cat node_modules/@carbon/charts-react/dist/index.d.ts | grep -i "BarChart"
+
+# Verify an icon exists
+ls node_modules/@carbon/icons-react/lib/ | grep -i "TrendUp"
+
+# Count available icons
+ls node_modules/@carbon/icons-react/lib/*.js | wc -l
+
+# Find icons matching a pattern
+ls node_modules/@carbon/icons-react/lib/ | grep -i [pattern]
+```
+
+## Resources
+
+### Carbon Design System Documentation
+- **Main Site**: https://carbondesignsystem.com/
+- **Components**: https://react.carbondesignsystem.com/
+- **Icons**: https://carbondesignsystem.com/guidelines/icons/library/
+- **Charts**: https://charts.carbondesignsystem.com/
+
+### Local Package Inspection
+- Charts: `node_modules/@carbon/charts-react/dist/index.d.ts`
+- Icons: `node_modules/@carbon/icons-react/lib/`
+- React Components: `node_modules/@carbon/react/`
+
+## Summary
+
+**Root Cause**: Assuming Carbon exports exist without verification.
+
+**Solution**: Always verify exports exist before using them.
+
+**Impact**: Zero runtime errors when following verification process.
+
+**Key Takeaway**: Spend 30 seconds verifying exports to save 30 minutes debugging runtime errors.

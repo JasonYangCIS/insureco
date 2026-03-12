@@ -24,7 +24,7 @@ import {
   TabPanel,
   ProgressBar,
 } from '@carbon/react';
-import { ChevronRight, TrendUp, Analytics } from '@carbon/icons-react';
+import { ChevronRight, Growth, Analytics } from '@carbon/icons-react';
 import { LineChart } from '@carbon/charts-react';
 import '@carbon/charts-react/styles.css';
 import { getMonthlyData, getAssetData, calculateYTDStats } from '../../data/financialMockData';
@@ -163,7 +163,7 @@ export default function ModernDashboard() {
           <div className="kpi-card-modern">
             <div className="kpi-header">
               <span className="kpi-label-modern">Premiums Collected</span>
-              <TrendUp size={20} className="kpi-icon-success" />
+              <Growth size={20} className="kpi-icon-success" />
             </div>
             <div className="kpi-value-modern">{formatCompact(ytdStats.totalOwed)}</div>
             <div className="kpi-progress">
@@ -177,7 +177,7 @@ export default function ModernDashboard() {
           <div className="kpi-card-modern">
             <div className="kpi-header">
               <span className="kpi-label-modern">Claims Paid</span>
-              <TrendUp size={20} className="kpi-icon-warning" />
+              <Growth size={20} className="kpi-icon-warning" />
             </div>
             <div className="kpi-value-modern">{formatCompact(ytdStats.totalClaimed)}</div>
             <div className="kpi-detail">

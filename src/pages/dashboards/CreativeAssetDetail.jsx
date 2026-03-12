@@ -21,7 +21,7 @@ import {
   Download,
   WarningAlt,
   CheckmarkFilled,
-  TrendUp,
+  Growth,
   Money,
 } from '@carbon/icons-react';
 import {
@@ -194,7 +194,7 @@ export default function CreativeAssetDetail() {
         <Column lg={16}>
           <Tile className="details-tile-creative">
             <h3 className="section-title-creative">
-              <TrendUp size={24} />
+              <Growth size={24} />
               Policy Information
             </h3>
             <div className="details-content-grid">

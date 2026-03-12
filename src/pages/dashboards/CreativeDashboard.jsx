@@ -22,7 +22,7 @@ import {
 import {
   Money,
   DocumentAdd,
-  TrendUp,
+  Growth,
   Warning,
   Checkmark,
   ArrowRight,
@@ -214,7 +214,7 @@ export default function CreativeDashboard() {
           <div className="kpi-feature-card">
             <div className="feature-card-header">
               <h3>Year-to-Date Performance</h3>
-              <TrendUp size={32} className="feature-icon" />
+              <Growth size={32} className="feature-icon" />
             </div>
             <div className="feature-metrics">
               <div className="feature-metric-row">
