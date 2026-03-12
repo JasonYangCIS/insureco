@@ -20,7 +20,7 @@ import {
   Select,
   SelectItem,
 } from '@carbon/react';
-import { ArrowRight, TrendUp, TrendDown } from '@carbon/icons-react';
+import { ArrowRight, TrendUp, CheckmarkFilled } from '@carbon/icons-react';
 import { LineChart, SimpleBarChart } from '@carbon/charts-react';
 import '@carbon/charts-react/styles.css';
 import { getMonthlyData, getAssetData, calculateYTDStats } from '../../data/financialMockData';
@@ -167,7 +167,7 @@ export default function ConservativeDashboard() {
                 </div>
               ) : (
                 <div className="kpi-trend kpi-trend-down">
-                  <TrendDown size={20} />
+                  <CheckmarkFilled size={20} />
                   <span>Within Target</span>
                 </div>
               )}

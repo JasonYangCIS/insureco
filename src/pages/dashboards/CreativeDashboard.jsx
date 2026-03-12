@@ -23,7 +23,6 @@ import {
   Money,
   DocumentAdd,
   TrendUp,
-  TrendDown,
   Warning,
   Checkmark,
   ArrowRight,
