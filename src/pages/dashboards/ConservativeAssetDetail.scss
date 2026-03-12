@@ -1,0 +1,159 @@
+@use '../../styles/tokens' as *;
+
+.conservative-asset-detail {
+  padding: var(--spacing-06);
+  background: var(--background-primary);
+  min-height: 100vh;
+
+  .detail-header {
+    margin-bottom: var(--spacing-07);
+
+    .back-button {
+      margin-bottom: var(--spacing-04);
+    }
+
+    .detail-title {
+      font-size: var(--heading-h2-size);
+      font-weight: var(--font-weight-semibold);
+      color: var(--text-primary);
+      margin: 0 0 var(--spacing-03);
+    }
+  }
+
+  .section-title {
+    font-size: var(--heading-h4-size);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+    margin: 0 0 var(--spacing-05);
+  }
+
+  // Policy Information Section
+  .policy-section {
+    margin-bottom: var(--spacing-07);
+
+    .info-card,
+    .summary-card {
+      padding: var(--spacing-06);
+      background: var(--background-primary);
+      border: 1px solid var(--border-subtle);
+      height: 100%;
+    }
+
+    .info-label {
+      font-size: var(--font-size-14);
+      color: var(--text-secondary);
+      font-weight: var(--font-weight-medium);
+    }
+
+    .info-value {
+      font-size: var(--font-size-14);
+      color: var(--text-primary);
+      font-weight: var(--font-weight-regular);
+
+      &.info-value-mono {
+        font-family: var(--font-family-mono);
+        font-size: var(--font-size-12);
+      }
+    }
+
+    .summary-stats {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-06);
+
+      .summary-stat {
+        .stat-label {
+          font-size: var(--font-size-12);
+          color: var(--text-secondary);
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          margin-bottom: var(--spacing-02);
+          font-weight: var(--font-weight-semibold);
+        }
+
+        .stat-value {
+          font-size: var(--heading-h4-size);
+          font-weight: var(--font-weight-semibold);
+          color: var(--text-primary);
+
+          &.stat-value-large {
+            font-size: 32px;
+            color: var(--interactive-primary);
+          }
+
+          &.stat-value-ratio {
+            color: var(--interactive-primary);
+          }
+        }
+      }
+    }
+  }
+
+  // Claims Section
+  .claims-section {
+    margin-bottom: var(--spacing-07);
+
+    .claims-container {
+      padding: var(--spacing-06);
+      background: var(--background-primary);
+      border: 1px solid var(--border-subtle);
+
+      .empty-state {
+        padding: var(--spacing-08);
+        text-align: center;
+        color: var(--text-secondary);
+      }
+    }
+  }
+
+  // Documents Section
+  .documents-section {
+    .documents-container {
+      padding: var(--spacing-06);
+      background: var(--background-primary);
+      border: 1px solid var(--border-subtle);
+
+      .document-list {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-04);
+
+        .document-item {
+          display: flex;
+          align-items: center;
+          gap: var(--spacing-04);
+          padding: var(--spacing-04);
+          border: 1px solid var(--border-subtle);
+          border-radius: var(--radius-md);
+          transition: background-color var(--motion-hover);
+
+          &:hover {
+            background-color: var(--background-hover);
+          }
+
+          .document-icon {
+            color: var(--interactive-primary);
+            display: flex;
+            align-items: center;
+          }
+
+          .document-info {
+            flex: 1;
+
+            .document-name {
+              font-size: var(--font-size-14);
+              font-weight: var(--font-weight-medium);
+              color: var(--text-primary);
+              margin-bottom: var(--spacing-01);
+            }
+
+            .document-meta {
+              font-size: var(--font-size-12);
+              color: var(--text-secondary);
+            }
+          }
+        }
+      }
+    }
+  }
+}
