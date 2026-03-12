@@ -28,7 +28,7 @@ import {
   Checkmark,
   ArrowRight,
 } from '@carbon/icons-react';
-import { LineChart, DonutChart, BarChart } from '@carbon/charts-react';
+import { LineChart, DonutChart, SimpleBarChart } from '@carbon/charts-react';
 import '@carbon/charts-react/styles.css';
 import { getMonthlyData, getAssetData, calculateYTDStats } from '../../data/financialMockData';
 import './CreativeDashboard.scss';
@@ -296,7 +296,7 @@ export default function CreativeDashboard() {
                 <span className="legend-item"><span className="legend-dot legend-dot-auto"></span>Auto</span>
               </div>
             </div>
-            <BarChart data={claimsComparisonData} options={barChartOptions} />
+            <SimpleBarChart data={claimsComparisonData} options={barChartOptions} />
           </Tile>
         </Column>
       </Grid>

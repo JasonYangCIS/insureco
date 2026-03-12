@@ -21,7 +21,7 @@ import {
   SelectItem,
 } from '@carbon/react';
 import { ArrowRight, TrendUp, TrendDown } from '@carbon/icons-react';
-import { LineChart, BarChart } from '@carbon/charts-react';
+import { LineChart, SimpleBarChart } from '@carbon/charts-react';
 import '@carbon/charts-react/styles.css';
 import { getMonthlyData, getAssetData, calculateYTDStats } from '../../data/financialMockData';
 import './ConservativeDashboard.scss';
@@ -219,7 +219,7 @@ export default function ConservativeDashboard() {
               {chartType === 'line' ? (
                 <LineChart data={chartData} options={chartOptions} />
               ) : (
-                <BarChart
+                <SimpleBarChart
                   data={chartData}
                   options={{
                     ...chartOptions,
