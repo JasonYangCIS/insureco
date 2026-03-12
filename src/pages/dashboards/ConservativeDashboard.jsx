@@ -113,7 +113,7 @@ export default function ConservativeDashboard() {
   return (
     <div className="conservative-dashboard">
       <Grid className="dashboard-header">
-        <Column lg={16}>
+        <Column sm={4} md={8} lg={16}>
           <h1 className="dashboard-title">Insurance Financial Analytics Dashboard</h1>
           <p className="dashboard-subtitle">Conservative View - Traditional Financial Overview</p>
         </Column>
@@ -199,7 +199,7 @@ export default function ConservativeDashboard() {
 
       {/* Chart Section */}
       <Grid className="chart-section">
-        <Column lg={16}>
+        <Column sm={4} md={8} lg={16}>
           <Tile className="chart-container">
             <div className="chart-toolbar">
               <h3 className="chart-title">Expense Visualization</h3>
@@ -240,7 +240,7 @@ export default function ConservativeDashboard() {
 
       {/* Asset Performance Table */}
       <Grid className="table-section">
-        <Column lg={16}>
+        <Column sm={4} md={8} lg={16}>
           <Tile className="table-container">
             <h3 className="table-title">Asset Performance Ledger</h3>
             

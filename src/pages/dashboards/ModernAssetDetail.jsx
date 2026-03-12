@@ -43,7 +43,7 @@ export default function ModernAssetDetail() {
     return (
       <div className="modern-asset-detail">
         <Grid>
-          <Column lg={16}>
+          <Column sm={4} md={8} lg={16}>
             <Tile>
               <h2>Asset Not Found</h2>
               <p>The requested asset could not be found.</p>
@@ -98,7 +98,7 @@ export default function ModernAssetDetail() {
       {/* Hero Header */}
       <div className="detail-hero">
         <Grid>
-          <Column lg={16}>
+          <Column sm={4} md={8} lg={16}>
             <Button
               kind="tertiary"
               renderIcon={ArrowLeft}
@@ -175,7 +175,7 @@ export default function ModernAssetDetail() {
 
       {/* Tabbed Content */}
       <Grid className="content-grid-modern">
-        <Column lg={16}>
+        <Column sm={4} md={8} lg={16}>
           <Tile className="content-tile-modern">
             <Tabs>
               <TabList aria-label="Asset details" contained>

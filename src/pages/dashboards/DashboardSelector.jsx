@@ -59,7 +59,7 @@ export default function DashboardSelector() {
     <div className="dashboard-selector">
       <div className="selector-hero">
         <Grid>
-          <Column lg={16}>
+          <Column sm={4} md={8} lg={16}>
             <div className="hero-content-selector">
               <h1 className="selector-title">Financial Dashboard Prototypes</h1>
               <p className="selector-subtitle">
@@ -115,7 +115,7 @@ export default function DashboardSelector() {
       </Grid>
 
       <Grid className="info-section">
-        <Column lg={16}>
+        <Column sm={4} md={8} lg={16}>
           <div className="info-content">
             <h3 className="info-title">About These Prototypes</h3>
             <p className="info-text">

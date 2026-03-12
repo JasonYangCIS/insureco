@@ -42,7 +42,7 @@ export default function ConservativeAssetDetail() {
     return (
       <div className="conservative-asset-detail">
         <Grid>
-          <Column lg={16}>
+          <Column sm={4} md={8} lg={16}>
             <Tile>
               <h2>Asset Not Found</h2>
               <p>The requested asset could not be found.</p>
@@ -95,7 +95,7 @@ export default function ConservativeAssetDetail() {
     <div className="conservative-asset-detail">
       {/* Header with Back Button */}
       <Grid className="detail-header">
-        <Column lg={16}>
+        <Column sm={4} md={8} lg={16}>
           <Button
             kind="ghost"
             renderIcon={ArrowLeft}
@@ -113,7 +113,7 @@ export default function ConservativeAssetDetail() {
 
       {/* Policy Information Section */}
       <Grid className="policy-section">
-        <Column lg={8}>
+        <Column sm={4} md={4} lg={8}>
           <Tile className="info-card">
             <h3 className="section-title">Policy Information</h3>
             <StructuredListWrapper>
@@ -165,7 +165,7 @@ export default function ConservativeAssetDetail() {
           </Tile>
         </Column>
 
-        <Column lg={8}>
+        <Column sm={4} md={4} lg={8}>
           <Tile className="summary-card">
             <h3 className="section-title">Claim Summary</h3>
             <div className="summary-stats">
@@ -192,7 +192,7 @@ export default function ConservativeAssetDetail() {
 
       {/* Claim History Section */}
       <Grid className="claims-section">
-        <Column lg={16}>
+        <Column sm={4} md={8} lg={16}>
           <Tile className="claims-container">
             <h3 className="section-title">Claim History</h3>
             {claimHistory.length === 0 ? (
@@ -240,7 +240,7 @@ export default function ConservativeAssetDetail() {
 
       {/* Policy Documents Section */}
       <Grid className="documents-section">
-        <Column lg={16}>
+        <Column sm={4} md={8} lg={16}>
           <Tile className="documents-container">
             <h3 className="section-title">Policy Documents</h3>
             <div className="document-list">

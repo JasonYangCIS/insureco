@@ -194,7 +194,7 @@ export default function CreativeDashboard() {
       <div className="creative-hero">
         <div className="hero-pattern"></div>
         <Grid>
-          <Column lg={10}>
+          <Column sm={4} md={8} lg={10}>
             <div className="hero-content-creative">
               <div className="hero-badge">
                 <Money size={24} />
@@ -204,7 +204,7 @@ export default function CreativeDashboard() {
               <p className="creative-subtitle">Wild & Creative View - Data Storytelling Experience</p>
             </div>
           </Column>
-          <Column lg={6}>
+          <Column sm={4} md={8} lg={6}>
             <div className="hero-stat-card">
               <div className="hero-stat-label">Portfolio Health Score</div>
               <div className="hero-stat-value">{healthScore.toFixed(0)}</div>
@@ -296,7 +296,7 @@ export default function CreativeDashboard() {
 
       {/* Claims Comparison Section */}
       <Grid className="comparison-section">
-        <Column lg={16}>
+        <Column sm={4} md={8} lg={16}>
           <Tile className="comparison-tile">
             <div className="section-header-creative">
               <h3>Claims Trend Analysis</h3>
@@ -312,7 +312,7 @@ export default function CreativeDashboard() {
 
       {/* High Risk Assets Table */}
       <Grid className="assets-section-creative">
-        <Column lg={16}>
+        <Column sm={4} md={8} lg={16}>
           <Tile className="assets-tile-creative">
             <div className="table-header-creative">
               <h3>Asset Performance Ranking</h3>

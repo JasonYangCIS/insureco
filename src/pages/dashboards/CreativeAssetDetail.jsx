@@ -46,7 +46,7 @@ export default function CreativeAssetDetail() {
     return (
       <div className="creative-asset-detail">
         <Grid>
-          <Column lg={16}>
+          <Column sm={4} md={8} lg={16}>
             <Tile>
               <h2>Asset Not Found</h2>
               <p>The requested asset could not be found.</p>
@@ -106,7 +106,7 @@ export default function CreativeAssetDetail() {
       <div className={`detail-hero-creative ${isHighRisk ? 'hero-danger' : isMediumRisk ? 'hero-warning' : 'hero-success'}`}>
         <div className="hero-pattern-creative"></div>
         <Grid>
-          <Column lg={10}>
+          <Column sm={4} md={8} lg={10}>
             <Button
               kind="tertiary"
               renderIcon={ArrowLeft}
@@ -123,7 +123,7 @@ export default function CreativeAssetDetail() {
               <p className="detail-hero-subtitle">Policy #{asset.policyNumber}</p>
             </div>
           </Column>
-          <Column lg={6}>
+          <Column sm={4} md={8} lg={6}>
             <div className="hero-risk-card">
               <div className="risk-icon-container">
                 {isHighRisk ? (
@@ -191,7 +191,7 @@ export default function CreativeAssetDetail() {
 
       {/* Policy Details Grid */}
       <Grid className="details-grid-creative">
-        <Column lg={16}>
+        <Column sm={4} md={8} lg={16}>
           <Tile className="details-tile-creative">
             <h3 className="section-title-creative">
               <Growth size={24} />
@@ -248,7 +248,7 @@ export default function CreativeAssetDetail() {
 
       {/* Claim History */}
       <Grid className="claims-grid-creative">
-        <Column lg={16}>
+        <Column sm={4} md={8} lg={16}>
           <Tile className="claims-tile-creative">
             <h3 className="section-title-creative">
               <WarningAlt size={24} />
@@ -308,7 +308,7 @@ export default function CreativeAssetDetail() {
 
       {/* Documents */}
       <Grid className="documents-grid-creative">
-        <Column lg={16}>
+        <Column sm={4} md={8} lg={16}>
           <Tile className="documents-tile-creative">
             <h3 className="section-title-creative">
               <DocumentPdf size={24} />

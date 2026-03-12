@@ -143,7 +143,7 @@ export default function ModernDashboard() {
     <div className="modern-dashboard">
       <div className="dashboard-hero">
         <Grid>
-          <Column lg={16}>
+          <Column sm={4} md={8} lg={16}>
             <div className="hero-content">
               <div className="hero-header">
                 <Analytics size={48} className="hero-icon" />
@@ -227,7 +227,7 @@ export default function ModernDashboard() {
 
       {/* Tabbed Layout */}
       <Grid className="content-grid">
-        <Column lg={16}>
+        <Column sm={4} md={8} lg={16}>
           <Tile className="content-tile">
             <Tabs selectedIndex={activeTab} onChange={(e) => { setActiveTab(e.selectedIndex); setPage(1); }}>
               <TabList aria-label="Dashboard views" contained>
