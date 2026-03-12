@@ -88,6 +88,22 @@ export default function Layout({ children }) {
                   </HeaderMenuItem>
                 </HeaderMenu>
 
+                {/* Financial Dashboards Menu with Prototypes */}
+                <HeaderMenu aria-label="Prototypes" menuLinkName="Prototypes">
+                  <HeaderMenuItem element={Link} to="/dashboards">
+                    Dashboard Selector
+                  </HeaderMenuItem>
+                  <HeaderMenuItem element={Link} to="/dashboard-conservative">
+                    Conservative
+                  </HeaderMenuItem>
+                  <HeaderMenuItem element={Link} to="/dashboard-modern">
+                    Modern Sleek
+                  </HeaderMenuItem>
+                  <HeaderMenuItem element={Link} to="/dashboard-creative">
+                    Wild/Creative
+                  </HeaderMenuItem>
+                </HeaderMenu>
+
                 <HeaderMenuItem onClick={() => navigate("/login")}>
                   Login
                 </HeaderMenuItem>
@@ -171,6 +187,38 @@ export default function Layout({ children }) {
                         onClick={isSideNavExpanded ? onClickSideNavExpand : undefined}
                       >
                         Payments
+                      </SideNavMenuItem>
+                    </SideNavMenu>
+
+                    {/* Financial Dashboards Prototypes Section in Sidebar */}
+                    <SideNavMenu title="Prototypes">
+                      <SideNavMenuItem
+                        element={Link}
+                        to="/dashboards"
+                        onClick={isSideNavExpanded ? onClickSideNavExpand : undefined}
+                      >
+                        Dashboard Selector
+                      </SideNavMenuItem>
+                      <SideNavMenuItem
+                        element={Link}
+                        to="/dashboard-conservative"
+                        onClick={isSideNavExpanded ? onClickSideNavExpand : undefined}
+                      >
+                        Conservative
+                      </SideNavMenuItem>
+                      <SideNavMenuItem
+                        element={Link}
+                        to="/dashboard-modern"
+                        onClick={isSideNavExpanded ? onClickSideNavExpand : undefined}
+                      >
+                        Modern Sleek
+                      </SideNavMenuItem>
+                      <SideNavMenuItem
+                        element={Link}
+                        to="/dashboard-creative"
+                        onClick={isSideNavExpanded ? onClickSideNavExpand : undefined}
+                      >
+                        Wild/Creative
                       </SideNavMenuItem>
                     </SideNavMenu>
 
