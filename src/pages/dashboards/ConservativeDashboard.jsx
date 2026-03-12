@@ -21,7 +21,7 @@ import {
   SelectItem,
   Tag,
 } from '@carbon/react';
-import { ArrowRight, Growth, CheckmarkFilled, ChevronRight } from '@carbon/icons-react';
+import { Growth, CheckmarkFilled, ChevronRight } from '@carbon/icons-react';
 import { LineChart, SimpleBarChart } from '@carbon/charts-react';
 import '@carbon/charts-react/styles.css';
 import { getMonthlyData, getAssetData, calculateYTDStats } from '../../data/financialMockData';
