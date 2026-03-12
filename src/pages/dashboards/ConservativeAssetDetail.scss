@@ -1,9 +1,14 @@
 @use '../../styles/tokens' as *;
 
 .conservative-asset-detail {
-  padding: var(--spacing-06);
+  // Mobile: minimal padding
+  padding: var(--spacing-03);
   background: var(--background-primary);
   min-height: 100vh;
+
+  @media (min-width: 42rem) { // 672px - tablet
+    padding: var(--spacing-06);
+  }
 
   .detail-header {
     margin-bottom: var(--spacing-07);

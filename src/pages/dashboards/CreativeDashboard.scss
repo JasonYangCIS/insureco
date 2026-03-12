@@ -12,9 +12,15 @@
     // Old: #8a3ffc → #a56eff → #d4bbff (light purple failed contrast at 2.0:1)
     // New: #8a3ffc → #6929c4 (dark purple passes contrast at 6.8:1)
     background: linear-gradient(135deg, #8a3ffc 0%, #6929c4 100%);
-    padding: var(--spacing-10) var(--spacing-06);
-    margin-bottom: var(--spacing-08);
+    // Mobile: reduced padding to minimize white gaps
+    padding: var(--spacing-07) var(--spacing-03);
+    margin-bottom: var(--spacing-05);
     overflow: hidden;
+
+    @media (min-width: 42rem) { // 672px - tablet breakpoint
+      padding: var(--spacing-10) var(--spacing-06);
+      margin-bottom: var(--spacing-08);
+    }
 
     .hero-pattern {
       position: absolute;
@@ -102,8 +108,13 @@
 
   // Asymmetric KPI Grid
   .kpi-grid-creative {
-    padding: 0 var(--spacing-06);
-    margin-bottom: var(--spacing-08);
+    // Mobile: no extra padding, let Carbon Grid handle spacing
+    padding: 0;
+    margin-bottom: var(--spacing-05);
+
+    @media (min-width: 42rem) { // 672px - tablet breakpoint
+      margin-bottom: var(--spacing-08);
+    }
 
     .kpi-feature-card {
       background: linear-gradient(135deg, #0f62fe 0%, #0043ce 100%);
@@ -250,8 +261,13 @@
 
   // Comparison Section
   .comparison-section {
-    padding: 0 var(--spacing-06);
-    margin-bottom: var(--spacing-08);
+    // Mobile: no extra padding, let Carbon Grid handle spacing
+    padding: 0;
+    margin-bottom: var(--spacing-05);
+
+    @media (min-width: 42rem) { // 672px - tablet breakpoint
+      margin-bottom: var(--spacing-08);
+    }
 
     .comparison-tile {
       background: var(--background-primary);
@@ -304,7 +320,8 @@
 
   // Assets Section
   .assets-section-creative {
-    padding: 0 var(--spacing-06);
+    // Mobile: no extra padding, let Carbon Grid handle spacing
+    padding: 0;
 
     .assets-tile-creative {
       background: var(--background-primary);

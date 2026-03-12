@@ -7,9 +7,15 @@
   // Bold Gradient Hero
   .detail-hero-creative {
     position: relative;
-    padding: var(--spacing-08) var(--spacing-06) var(--spacing-10);
-    margin-bottom: var(--spacing-08);
+    // Mobile: reduced padding
+    padding: var(--spacing-06) var(--spacing-03) var(--spacing-07);
+    margin-bottom: var(--spacing-05);
     overflow: hidden;
+
+    @media (min-width: 42rem) { // 672px - tablet
+      padding: var(--spacing-08) var(--spacing-06) var(--spacing-10);
+      margin-bottom: var(--spacing-08);
+    }
 
     &.hero-success {
       // WCAG AA: Changed from light green gradient to darker green for sufficient contrast
@@ -124,8 +130,13 @@
 
   // Stats Grid
   .stats-grid-creative {
-    padding: 0 var(--spacing-06);
-    margin-bottom: var(--spacing-08);
+    // Mobile: no extra padding
+    padding: 0;
+    margin-bottom: var(--spacing-05);
+
+    @media (min-width: 42rem) { // 672px - tablet
+      margin-bottom: var(--spacing-08);
+    }
 
     .stat-feature-card {
       background: linear-gradient(135deg, #8a3ffc 0%, #a56eff 100%);
@@ -220,8 +231,13 @@
   .details-grid-creative,
   .claims-grid-creative,
   .documents-grid-creative {
-    padding: 0 var(--spacing-06);
-    margin-bottom: var(--spacing-07);
+    // Mobile: no extra padding
+    padding: 0;
+    margin-bottom: var(--spacing-05);
+
+    @media (min-width: 42rem) { // 672px - tablet
+      margin-bottom: var(--spacing-07);
+    }
 
     .details-tile-creative,
     .claims-tile-creative,

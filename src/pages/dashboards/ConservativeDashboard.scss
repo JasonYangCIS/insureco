@@ -1,12 +1,21 @@
 @use '../../styles/tokens' as *;
 
 .conservative-dashboard {
-  padding: var(--spacing-06);
+  // Mobile: minimal padding, let Carbon Grid handle spacing
+  padding: var(--spacing-03);
   background: var(--background-primary);
   min-height: 100vh;
 
+  @media (min-width: 42rem) { // 672px - tablet breakpoint
+    padding: var(--spacing-06);
+  }
+
   .dashboard-header {
-    margin-bottom: var(--spacing-07);
+    margin-bottom: var(--spacing-05);
+
+    @media (min-width: 42rem) {
+      margin-bottom: var(--spacing-07);
+    }
 
     .dashboard-title {
       font-size: var(--heading-h2-size);
@@ -24,7 +33,11 @@
 
   // KPI Cards Section
   .kpi-section {
-    margin-bottom: var(--spacing-07);
+    margin-bottom: var(--spacing-05);
+
+    @media (min-width: 42rem) {
+      margin-bottom: var(--spacing-07);
+    }
 
     .kpi-card {
       padding: var(--spacing-06);
@@ -105,7 +118,11 @@
 
   // Chart Section
   .chart-section {
-    margin-bottom: var(--spacing-07);
+    margin-bottom: var(--spacing-05);
+
+    @media (min-width: 42rem) {
+      margin-bottom: var(--spacing-07);
+    }
 
     .chart-container {
       padding: var(--spacing-06);

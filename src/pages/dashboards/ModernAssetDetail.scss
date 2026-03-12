@@ -7,8 +7,14 @@
   // Hero Header
   .detail-hero {
     background: linear-gradient(135deg, #0f62fe 0%, #001d6c 100%);
-    padding: var(--spacing-07) var(--spacing-06) var(--spacing-08);
-    margin-bottom: var(--spacing-07);
+    // Mobile: reduced padding
+    padding: var(--spacing-05) var(--spacing-03) var(--spacing-06);
+    margin-bottom: var(--spacing-05);
+
+    @media (min-width: 42rem) { // 672px - tablet
+      padding: var(--spacing-07) var(--spacing-06) var(--spacing-08);
+      margin-bottom: var(--spacing-07);
+    }
 
     .back-button-modern {
       color: rgba(255, 255, 255, 0.9);
@@ -67,8 +73,13 @@
 
   // Quick Stats Grid
   .stats-grid-modern {
-    padding: 0 var(--spacing-06);
-    margin-bottom: var(--spacing-07);
+    // Mobile: no extra padding
+    padding: 0;
+    margin-bottom: var(--spacing-05);
+
+    @media (min-width: 42rem) {
+      margin-bottom: var(--spacing-07);
+    }
 
     .stat-card-modern {
       background: var(--background-primary);
@@ -122,7 +133,12 @@
 
   // Content Grid
   .content-grid-modern {
-    padding: 0 var(--spacing-06) var(--spacing-06);
+    // Mobile: no extra padding
+    padding: 0 0 var(--spacing-05);
+
+    @media (min-width: 42rem) {
+      padding: 0 0 var(--spacing-06);
+    }
 
     .content-tile-modern {
       background: var(--background-primary);
