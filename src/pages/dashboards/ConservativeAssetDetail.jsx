@@ -105,7 +105,7 @@ export default function ConservativeAssetDetail() {
             Back to Dashboard
           </Button>
           <h1 className="detail-title">{asset.assetName}</h1>
-          <Tag type={asset.assetCategory === 'Property' ? 'blue' : 'green'} size="md">
+          <Tag type={asset.assetCategory === 'Property' ? 'blue' : 'teal'} size="md">
             {asset.assetCategory}
           </Tag>
         </Column>

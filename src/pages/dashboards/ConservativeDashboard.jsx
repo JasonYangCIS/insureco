@@ -293,7 +293,7 @@ export default function ConservativeDashboard() {
                               return (
                                 <TableCell key={cell.id}>
                                   <Tag
-                                    type={cell.value === 'Property' ? 'blue' : 'green'}
+                                    type={cell.value === 'Property' ? 'blue' : 'teal'}
                                     size="sm"
                                   >
                                     {cell.value}
