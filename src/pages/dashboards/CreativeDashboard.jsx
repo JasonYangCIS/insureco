@@ -94,6 +94,16 @@ export default function CreativeDashboard() {
         'Revenue': '#be95ff',
       },
     },
+    // WCAG AA: White text for proper contrast on blue gradient background
+    theme: 'g100', // Use Carbon's dark theme for white text
+    grid: {
+      x: {
+        enabled: false,
+      },
+      y: {
+        enabled: true,
+      },
+    },
   };
 
   const donutChartOptions = {
