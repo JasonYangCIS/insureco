@@ -328,8 +328,132 @@
   }
 }
 
+// ─── Summary Step ─────────────────────────────────────────────────────────────
+.signup-summary {
+  gap: var(--spacing-05);
+}
+
+.summary-sections {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-05);
+}
+
+.summary-section {
+  border: 1px solid var(--border-subtle);
+  border-radius: 4px;
+  overflow: hidden;
+
+  &__title {
+    font-family: 'Inter', -apple-system, Roboto, Helvetica, sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    background: var(--background-tertiary);
+    padding: var(--spacing-03) var(--spacing-05);
+    margin: 0;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+}
+
+.summary-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.summary-field {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--spacing-04) var(--spacing-05);
+  border-bottom: 1px solid var(--border-subtle);
+  border-right: 1px solid var(--border-subtle);
+
+  &:nth-child(even) {
+    border-right: none;
+  }
+
+  &:nth-last-child(-n+2) {
+    border-bottom: none;
+  }
+
+  // If only one item in the last row, span full width
+  &:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+    border-right: none;
+    border-bottom: none;
+  }
+
+  dt {
+    font-family: 'Inter', -apple-system, Roboto, Helvetica, sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-secondary);
+    margin: 0;
+  }
+
+  dd {
+    font-family: 'Inter', -apple-system, Roboto, Helvetica, sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--text-primary);
+    margin: 0;
+    word-break: break-word;
+  }
+}
+
+.summary-confirm-note {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-03);
+  padding: var(--spacing-04) var(--spacing-05);
+  background: var(--background-selected);
+  border: 1px solid var(--border-interactive);
+  border-radius: 4px;
+  color: var(--text-primary);
+  font-size: 13px;
+  line-height: 1.5;
+
+  svg {
+    flex-shrink: 0;
+    margin-top: 2px;
+    color: var(--interactive-primary);
+  }
+}
+
 // ─── Responsive ───────────────────────────────────────────────────────────────
 @media (max-width: 671px) {
+  .summary-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .summary-field {
+    border-right: none;
+
+    &:last-child:nth-child(odd) {
+      grid-column: 1;
+    }
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &:nth-last-child(-n+2) {
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
   .signup-outer {
     padding: 12px 16px;
     gap: 20px;
