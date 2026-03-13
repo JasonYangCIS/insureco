@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Grid,
@@ -11,7 +11,7 @@ import {
 import {
   ArrowRight,
   Warning,
-  TrendingUp,
+  Analytics,
   Money,
   ChartLineSmooth,
 } from '@carbon/icons-react';
@@ -221,7 +221,7 @@ export default function FinancialDashboardWild() {
           <Column sm={4} md={2} lg={5}>
             <div className="fdw-spotlight-card fdw-spotlight-card--loss">
               <div className="fdw-spotlight-card__icon-row">
-                <TrendingUp size={24} />
+                <Analytics size={24} />
                 <span className="fdw-spotlight-card__label">Portfolio Loss Ratio</span>
               </div>
               <p className="fdw-spotlight-card__value">{lossRatio}%</p>
