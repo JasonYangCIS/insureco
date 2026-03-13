@@ -1,0 +1,412 @@
+---
+description: WCAG 2.1 AA accessibility requirements — ARIA patterns, sr-only, semantic HTML, performance, and debugging checklist
+globs:
+  - "**/*.jsx"
+  - "**/*.tsx"
+  - "**/*.scss"
+alwaysApply: false
+---
+
+# WCAG 2.1 AA Accessibility Requirements
+
+## Overview
+
+Every component and page in this project must meet **WCAG 2.1 Level AA**. Carbon
+Design System components are accessible by default — preserve that accessibility
+when composing them, and apply the patterns below whenever you write custom
+components or override Carbon markup.
+
+---
+
+## 1. Global `.sr-only` Utility Class
+
+A `.sr-only` class is defined globally in `src/styles/components.scss`. Use it
+to add screen-reader-only text without cluttering the visual UI.
+
+
+/* already in src/styles/components.scss — do not redefine */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+```
+
+```jsx
+// Usage
+<Tag type="green" renderIcon={CheckmarkFilled}>
+  {step.label}
+  <span className="sr-only"> — complete</span>
+</Tag>
+```
+
+---
+
+## 2. WCAG 1.4.1 — Not Color or Symbol Alone
+
+Never rely solely on color, an emoji, or a shape to communicate meaning.
+Always pair a visual indicator with a text alternative.
+
+### Emoji in tables / comparison grids
+```jsx
+// ❌ BAD — emoji is the only indicator
+<td>✅</td>
+
+// ✅ GOOD — emoji is decorative, sr-only carries the meaning
+function ScoreCell({ score }) {
+  const map = {
+    '✅': { label: 'Yes', cls: 'score--yes' },
+    '❌': { label: 'No',  cls: 'score--no'  },
+    '⚠️': { label: 'Partial', cls: 'score--partial' },
+  };
+  const meta = map[score] ?? { label: score, cls: '' };
+  return (
+    <span className={`score ${meta.cls}`}>
+      <span aria-hidden="true">{score}</span>
+      <span className="sr-only">{meta.label}</span>
+    </span>
+  );
+}
+```
+
+### Status icons (Carbon icons used as status)
+```jsx
+// ❌ BAD — icon communicates state visually only
+<CheckmarkFilled size={16} className="icon--done" />
+
+// ✅ GOOD — sr-only text accompanies the icon
+<CheckmarkFilled size={16} className="icon--done" />
+<span className="sr-only">complete</span>
+```
+
+---
+
+## 3. Decorative Elements — `aria-hidden="true"`
+
+Any element that is purely visual and adds no information for screen readers
+must be hidden from the accessibility tree.
+
+```jsx
+// ✅ Decorative number badge (heading already names the section)
+<div className="option-number" aria-hidden="true">1</div>
+
+// ✅ Decorative mobile phone chrome in a preview component
+<div className="mobile-frame-notch" aria-hidden="true" />
+<div className="mobile-frame-status-bar" aria-hidden="true">
+  <span>9:41</span>
+  <span>●●●</span>
+</div>
+
+// ✅ Decorative connector line between steps
+<div className="step-connector" aria-hidden="true" />
+```
+
+**Important**: Do NOT apply `aria-hidden="true"` to a parent element that
+contains meaningful interactive or text content — it hides the entire subtree.
+
+---
+
+## 4. Semantic HTML — Tables
+
+Use real `<table>` elements when displaying tabular comparison data. Do not use
+CSS-grid divs as a fake table — screen readers cannot navigate them.
+
+```jsx
+// ❌ BAD — divs with grid layout are not accessible as a table
+<div className="comparison-header">
+  <div>Criteria</div>
+  <div>Option 1</div>
+</div>
+<div className="comparison-row">
+  <div>No scroll</div>
+  <div>✅</div>
+</div>
+
+// ✅ GOOD — semantic table with scope attributes
+<table aria-label="Design comparison">
+  <thead>
+    <tr>
+      <th scope="col">Criteria</th>
+      <th scope="col">Option 1</th>
+      <th scope="col">Option 2</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>No scroll</td>
+      <td><ScoreCell score="✅" /></td>
+      <td><ScoreCell score="❌" /></td>
+    </tr>
+  </tbody>
+</table>
+```
+
+---
+
+## 5. ARIA Roles and Landmarks
+
+### Page structure
+- Use `<main>` (not `<div>`) for the page content root
+- Use `<section aria-labelledby="heading-id">` for named regions
+- Use `<nav aria-label="...">` for navigation blocks
+
+```jsx
+// ✅ Page root
+<main className="pip-page">
+
+// ✅ Named section
+<section className="pip-option" aria-labelledby="opt1-title">
+  <h2 id="opt1-title">Vertical Step Tracker</h2>
+  ...
+</section>
+
+// ✅ Interactive region
+<div role="region" aria-label="Step preview controls">
+  ...
+</div>
+```
+
+### Custom progress / stepper components
+Do not use `role="progressbar"` on a container that also has child elements with
+individual `aria-label`s — this creates redundant/conflicting announcements.
+
+```jsx
+// ❌ BAD — role="progressbar" + per-dot aria-labels = noisy/conflicting
+<div role="progressbar" aria-valuenow={2} aria-valuemin={1} aria-valuemax={6}>
+  {steps.map(step => (
+    <div aria-label={`${step.label}: current`} />
+  ))}
+</div>
+
+// ✅ GOOD — single aria-label on wrapper, visual track is aria-hidden,
+//           a hidden <ol> gives screen readers the full step list
+<div
+  role="group"
+  aria-label={`Progress: step ${current + 1} of ${total}, ${steps[current].label}`}
+>
+  <div aria-hidden="true">
+    {/* visual dots / track */}
+  </div>
+  <ol className="sr-only">
+    {steps.map((s, i) => (
+      <li key={s.key}>{s.label}: {i < current ? 'complete' : i === current ? 'current' : 'upcoming'}</li>
+    ))}
+  </ol>
+</div>
+```
+
+---
+
+## 6. Live Regions — Dynamic Content Updates
+
+When content changes in response to user interaction without a page navigation,
+announce the change to screen readers using `aria-live`.
+
+```jsx
+// ✅ Step name updates when Back/Next is clicked
+<span
+  className="controls-step-name"
+  aria-live="polite"
+  aria-atomic="true"
+>
+  {steps[currentStep].label}
+</span>
+```
+
+- Use `aria-live="polite"` for non-urgent updates (most cases)
+- Use `aria-live="assertive"` only for errors or critical alerts
+- Add `aria-atomic="true"` when the full string should be re-read on change
+
+---
+
+## 7. Form Inputs and Labels
+
+- Every form field must have an associated `<label>` (Carbon provides this via the `labelText` prop)
+- `ProgressBar` requires a non-empty `label` prop — never pass `label=""`
+
+```jsx
+// ❌ BAD — no accessible name
+<ProgressBar label="" hideLabel value={50} max={100} />
+
+// ✅ GOOD — label provides accessible name; hideLabel hides it visually if needed
+<ProgressBar label="Sign-up progress" helperText="50% complete" value={50} max={100} />
+```
+
+---
+
+## 8. Heading Hierarchy
+
+Headings must follow a logical descending order within each page or section.
+Do not skip levels.
+
+```
+h1  — Page title (one per page)
+  h2  — Major section or option card title
+    h3  — Sub-section title (e.g. step name inside a demo card)
+      h4  — Assessment sub-headings (Pros / Cons)
+```
+
+When using Carbon's `<Heading>` component, always pass an explicit `as` prop —
+without a `Section` context wrapper, the default level is unpredictable.
+
+```jsx
+// ❌ BAD — level depends on Section context which may not exist
+<Heading>Progress Bar Designs</Heading>
+
+// ✅ GOOD — explicit semantic level
+<Heading as="h1" className="pip-page-title">Progress Bar Designs</Heading>
+<Heading as="h2" id="opt1-title" className="pip-option-title">Vertical Step Tracker</Heading>
+```
+
+---
+
+## 9. Icon Accessibility
+
+Carbon icons require an `aria-label` when used as standalone meaningful elements.
+When an icon is decorative (accompanied by visible text), it should be hidden.
+
+```jsx
+// ✅ Standalone icon — label required
+<CheckmarkFilled aria-label="Step complete" size={16} />
+
+// ✅ Icon beside visible text — hide the icon
+<Button renderIcon={ArrowRight} iconDescription="Go to next step">Next</Button>
+
+// ✅ Decorative icon in a list — sr-only text carries meaning
+<CheckmarkFilled size={16} aria-hidden="true" />
+<span className="sr-only">complete</span>
+```
+
+---
+
+## 10. Color Contrast (WCAG 1.4.3)
+
+Minimum contrast ratios:
+- **Normal text** (< 18pt / < 14pt bold): **4.5:1**
+- **Large text** (≥ 18pt / ≥ 14pt bold): **3:1**
+- **UI components and focus indicators**: **3:1**
+
+Always use semantic design tokens — never hardcode hex colors.
+See `.builder/rules/theme-contrast-guidelines.mdc` for the full list of safe
+token pairs.
+
+```scss
+// ❌ BAD — hardcoded colors break in dark mode
+.step-label { color: #161616; }
+
+// ✅ GOOD — token adapts to light/dark theme automatically
+.step-label { color: var(--text-primary); }
+```
+
+---
+
+## 11. Keyboard Navigation
+
+- All interactive elements must be reachable and operable via keyboard
+- Use Carbon's Button component rather than `<div onClick>` — Carbon manages focus, keyboard events, and roles automatically
+- Do not suppress default focus outlines; use `outline-color: var(--interactive-primary)` to style them on-brand
+
+```jsx
+// ❌ BAD — div is not keyboard focusable or screen-reader actionable
+<div className="step-dot" onClick={handleClick}>3</div>
+
+// ✅ GOOD — Button handles focus, Enter, Space, and ARIA role
+<Button kind="ghost" onClick={handleClick}>Step 3</Button>
+```
+
+---
+
+## 12. Performance — Static Data Outside Components
+
+Static arrays or objects defined inside a React component are recreated on every
+render. Move them to module scope.
+
+```jsx
+// ❌ BAD — STEPS recreated on every render
+export default function MyPage() {
+  const STEPS = [
+    { key: 'personal', label: 'Personal Info' },
+    { key: 'address',  label: 'Address' },
+  ];
+  ...
+}
+
+// ✅ GOOD — created once at module load
+const STEPS = [
+  { key: 'personal', label: 'Personal Info' },
+  { key: 'address',  label: 'Address' },
+];
+
+export default function MyPage() {
+  ...
+}
+```
+
+This also applies to static config objects, comparison row data, option name
+arrays, and any other value that does not depend on props or state.
+
+---
+
+## 13. Key Props — Avoid Array Index
+
+Using array index as a `key` causes React to incorrectly reuse DOM nodes when
+lists reorder or filter. Always use a stable, unique string.
+
+```jsx
+// ❌ BAD — index key causes subtle bugs when list order changes
+{rows.map((row, i) => <tr key={i}>...</tr>)}
+
+// ✅ GOOD — stable key from data
+{rows.map((row) => <tr key={row.id}>...</tr>)}
+
+// ✅ GOOD — compound key when no id is available
+{rows.map((row, i) => (
+  row.scores.map((score, j) => (
+    <td key={`${row.label}-${j}`}>{score}</td>
+  ))
+))}
+```
+
+---
+
+## 14. Audit Checklist (run before marking any feature complete)
+
+### Imports
+- [ ] Every Carbon import uses the exact correct export name (see `.builder/rules/carbon-component-verification.mdc`)
+- [ ] No unused imports remain in the file
+
+### Semantics
+- [ ] Page has one `<main>` landmark
+- [ ] Heading levels are sequential (h1 → h2 → h3...), no skipped levels
+- [ ] Tables use `<table>/<thead>/<tbody>/<th scope>/<td>`, not CSS-grid divs
+- [ ] Forms have labels on every field
+
+### ARIA
+- [ ] Decorative images, icons, and chrome have `aria-hidden="true"`
+- [ ] Meaningful icons have `aria-label` or adjacent `sr-only` text
+- [ ] Dynamic regions that update have `aria-live="polite"` and `aria-atomic="true"`
+- [ ] Custom progress/stepper uses `role="group"` + full `aria-label` (not `role="progressbar"` with per-step labels)
+- [ ] Interactive regions have `role="region"` + `aria-label`
+
+### Color / contrast
+- [ ] No hardcoded hex colors — all colors use `var(--token-name)`
+- [ ] Emoji or icon-only status indicators have `sr-only` text alternative
+
+### Performance
+- [ ] Static data arrays/objects are outside the component function
+- [ ] Stable string keys used in all `.map()` calls
+
+### Keyboard / focus
+- [ ] All interactive elements reachable by Tab key
+- [ ] Focus indicators visible in both light and dark themes
+- [ ] No `<div onClick>` replacing a proper interactive element
+
+### DevServer
+- [ ] `DevServerLogs` shows no runtime errors after saving
+- [ ] HMR update fires for every changed file (confirms Vite compiled successfully)
