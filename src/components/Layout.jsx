@@ -80,6 +80,22 @@ export default function Layout({ children }) {
                   </HeaderMenuItem>
                 </HeaderMenu>
 
+                {/* Financial Dashboard Menu */}
+                <HeaderMenu aria-label="Financial" menuLinkName="Financial">
+                  <HeaderMenuItem element={Link} to="/financial-dashboard">
+                    Overview
+                  </HeaderMenuItem>
+                  <HeaderMenuItem element={Link} to="/financial-dashboard/conservative">
+                    Conservative
+                  </HeaderMenuItem>
+                  <HeaderMenuItem element={Link} to="/financial-dashboard/sleek">
+                    Sleek
+                  </HeaderMenuItem>
+                  <HeaderMenuItem element={Link} to="/financial-dashboard/wild">
+                    Wild
+                  </HeaderMenuItem>
+                </HeaderMenu>
+
                 <HeaderMenuItem onClick={() => navigate("/login")}>
                   Login
                 </HeaderMenuItem>
@@ -157,6 +173,22 @@ export default function Layout({ children }) {
                         to="/business/payments"
                       >
                         Payments
+                      </SideNavMenuItem>
+                    </SideNavMenu>
+
+                    {/* Financial Dashboard Section in Sidebar */}
+                    <SideNavMenu title="Financial">
+                      <SideNavMenuItem element={Link} to="/financial-dashboard">
+                        Overview
+                      </SideNavMenuItem>
+                      <SideNavMenuItem element={Link} to="/financial-dashboard/conservative">
+                        Conservative
+                      </SideNavMenuItem>
+                      <SideNavMenuItem element={Link} to="/financial-dashboard/sleek">
+                        Sleek
+                      </SideNavMenuItem>
+                      <SideNavMenuItem element={Link} to="/financial-dashboard/wild">
+                        Wild
                       </SideNavMenuItem>
                     </SideNavMenu>
 
