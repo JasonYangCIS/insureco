@@ -95,6 +95,66 @@ function FitBounds({ positions }) {
 }
 
 /**
+ * MapAccessibility — patches Leaflet-generated DOM elements that cannot
+ * receive ARIA attributes via React props (zoom buttons, popup close button).
+ * Addresses WCAG 2.1: 1.1.1, 2.1.1, 2.4.7, 4.1.2
+ */
+function MapAccessibility() {
+  const map = useMap();
+
+  useEffect(() => {
+    const container = map.getContainer();
+
+    // ── Zoom control buttons ────────────────────────────────────────────────
+    // Leaflet renders these as <a href="#"> with only "+" / "−" text content,
+    // which is insufficient for screen readers and keyboard users.
+    const patchZoomButtons = () => {
+      const zoomIn = container.querySelector('.leaflet-control-zoom-in');
+      const zoomOut = container.querySelector('.leaflet-control-zoom-out');
+      if (zoomIn) {
+        zoomIn.setAttribute('aria-label', 'Zoom in');
+        zoomIn.setAttribute('title', 'Zoom in');
+        zoomIn.setAttribute('role', 'button');
+      }
+      if (zoomOut) {
+        zoomOut.setAttribute('aria-label', 'Zoom out');
+        zoomOut.setAttribute('title', 'Zoom out');
+        zoomOut.setAttribute('role', 'button');
+      }
+    };
+    patchZoomButtons();
+
+    // ── Popup close button (injected dynamically) ────────────────────────────
+    // The "×" close button has no accessible label by default.
+    const observer = new MutationObserver(() => {
+      const closeBtn = container.querySelector(
+        '.leaflet-popup-close-button:not([aria-label])'
+      );
+      if (closeBtn) {
+        closeBtn.setAttribute('aria-label', 'Close popup');
+        closeBtn.setAttribute('title', 'Close popup');
+      }
+    });
+    observer.observe(container, { childList: true, subtree: true });
+
+    // ── Attribution links ───────────────────────────────────────────────────
+    // Ensure attribution links open in new tab with accessible hint
+    const attrLinks = container.querySelectorAll(
+      '.leaflet-control-attribution a'
+    );
+    attrLinks.forEach((link) => {
+      if (!link.getAttribute('aria-label')) {
+        link.setAttribute('rel', 'noopener noreferrer');
+      }
+    });
+
+    return () => observer.disconnect();
+  }, [map]);
+
+  return null;
+}
+
+/**
  * MapView - Reusable Leaflet map component
  * Displays properties and vehicles on an interactive map
  */
@@ -164,7 +224,12 @@ export default function MapView({ properties = [], vehicles = [], selectedAssetT
   return (
     // Key on parent div forces React to create new DOM element when selectedAssetType changes
     // This prevents "Map container is already initialized" error in React Strict Mode
-    <div key={`map-container-${selectedAssetType}`} className="map-view-container">
+    <div
+      key={`map-container-${selectedAssetType}`}
+      className="map-view-container"
+      role="region"
+      aria-label="Interactive asset map. Use arrow keys to pan, + and − to zoom."
+    >
       <MapContainer
         center={defaultCenter}
         zoom={defaultZoom}
@@ -172,6 +237,9 @@ export default function MapView({ properties = [], vehicles = [], selectedAssetT
         scrollWheelZoom={true}
       >
         <ThemedTileLayer isDark={isDark} />
+
+        {/* WCAG patches for Leaflet-generated DOM */}
+        <MapAccessibility />
 
         {/* Fit bounds to all markers */}
         <FitBounds positions={allPositions} />
