@@ -1,0 +1,169 @@
+@use '../../styles/tokens' as *;
+
+.fd-conservative {
+  padding: var(--spacing-06) var(--spacing-07);
+  max-width: 1400px;
+  margin: 0 auto;
+
+  &__page-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--spacing-05);
+    margin-bottom: var(--spacing-07);
+  }
+
+  &__title {
+    font-size: 1.75rem;
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-02);
+  }
+
+  &__subtitle {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+  }
+
+  &__controls {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-04);
+    flex-wrap: wrap;
+  }
+
+  &__timeframe {
+    min-width: 160px;
+  }
+
+  // KPI Grid
+  &__kpi-grid {
+    margin-bottom: var(--spacing-07);
+  }
+
+  &__kpi-tile {
+    padding: var(--spacing-05);
+    background: var(--background-secondary);
+    height: 100%;
+  }
+
+  &__kpi-label {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    font-weight: var(--font-weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: var(--spacing-03);
+  }
+
+  &__kpi-value {
+    font-size: 2rem;
+    font-weight: var(--font-weight-semibold);
+    margin-bottom: var(--spacing-02);
+    line-height: 1.1;
+
+    &--green {
+      color: #24a148;
+    }
+
+    &--red {
+      color: var(--interactive-primary);
+    }
+  }
+
+  &__kpi-sub {
+    font-size: 0.8125rem;
+    color: var(--text-tertiary);
+  }
+
+  &__split {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-01);
+    margin-top: var(--spacing-02);
+  }
+
+  &__split-item {
+    font-size: 0.875rem;
+    font-weight: var(--font-weight-semibold);
+
+    &--green { color: #24a148; }
+    &--red   { color: var(--interactive-primary); }
+  }
+
+  // Chart
+  &__chart-tile {
+    padding: var(--spacing-06);
+    background: var(--background-secondary);
+    margin-bottom: var(--spacing-07);
+  }
+
+  &__chart-title {
+    font-size: 1.125rem;
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-05);
+  }
+
+  &__chart-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-05);
+    margin-bottom: var(--spacing-05);
+
+    .cds--checkbox-label {
+      color: var(--text-secondary);
+      font-size: 0.8125rem;
+    }
+  }
+
+  // Ledger
+  &__ledger-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--spacing-03);
+    margin-bottom: var(--spacing-05);
+  }
+
+  &__ledger-title {
+    font-size: 1.125rem;
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+  }
+
+  &__ledger-hint {
+    font-size: 0.8125rem;
+    color: var(--text-tertiary);
+  }
+
+  &__table {
+    width: 100%;
+    margin-bottom: var(--spacing-07);
+  }
+
+  &__table-row {
+    cursor: pointer;
+
+    &:hover td {
+      background: var(--background-hover) !important;
+    }
+
+    &--high-claim td:last-child {
+      background: rgba(218, 30, 40, 0.06);
+    }
+  }
+
+  &__claims-cell {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-02);
+  }
+
+  &__warning-icon {
+    color: var(--interactive-primary);
+    flex-shrink: 0;
+  }
+}
