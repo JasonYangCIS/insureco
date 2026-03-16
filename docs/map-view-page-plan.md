@@ -183,7 +183,7 @@ Map popup backgrounds use: `background: var(--background-primary)`, `color: var(
 
 ## Implementation Steps
 
-1. **Install dependencies** — `npm install leaflet react-leaflet react-leaflet-cluster`
+1. **Install dependencies** — `npm install leaflet react-leaflet react-leaflet-cluster react-helmet-async`
 2. **Verify vehicle lat/lng** — Check `mockVehicles` in `businessMockData.js`; add coordinates if missing
 3. **Create `AssetMap.jsx`** — Leaflet map with custom markers, tile switching, clustering, popups
 4. **Create `AssetListPanel.jsx`** — Filterable asset list with selection state
@@ -192,7 +192,8 @@ Map popup backgrounds use: `background: var(--background-primary)`, `color: var(
 7. **Update `App.jsx`** — Replace `BusinessComingSoon` with `MapViewPage` for `/business/map` route
 8. **Import Leaflet CSS** — Add `import 'leaflet/dist/leaflet.css'` in the map component (scoped import)
 9. **Fix Leaflet default marker icons** — Apply the standard Vite/Webpack fix for Leaflet's broken default icon URLs (set `L.Icon.Default.mergeOptions` with bundled asset paths)
-10. **Test and verify** — Light/dark themes, mobile/tablet/desktop layouts, keyboard nav, screen reader behavior, marker clustering, popup links
+10. **Implement JSON-LD Schema** — Add `react-helmet-async` `<Helmet>` to `MapViewPage.jsx` rendering a `<script type="application/ld+json">` block with one `LocalBusiness` entry per property in `mockProperties`
+11. **Test and verify** — Light/dark themes, mobile/tablet/desktop layouts, keyboard nav, screen reader behavior, marker clustering, popup links, JSON-LD output in page source
 
 ---
 
@@ -206,7 +207,7 @@ If public SSR/SEO were needed for the whole app, the solution would be migrating
 
 ### Schema.org / JSON-LD
 
-Schema markup **can** be added to the Map View page independently of how the map renders. A `<script type="application/ld+json">` block can embed structured data for each insured location using the `Place` or `LocalBusiness` schema types:
+Schema markup **must** be added to the Map View page as a required part of this implementation. A `<script type="application/ld+json">` block will embed structured data for each insured location using the `LocalBusiness` schema type:
 
 ```json
 {
@@ -218,13 +219,14 @@ Schema markup **can** be added to the Map View page independently of how the map
 }
 ```
 
-This can be injected via a `<Helmet>` component (if `react-helmet-async` is installed) or as a static `<script>` tag rendered by the page component.
+This will be injected via a `<Helmet>` component using `react-helmet-async` (install if not already present), rendering a `<script type="application/ld+json">` tag in the page `<head>`. One `LocalBusiness` entry will be generated per visible property in `mockProperties`.
 
-### Authenticated Route — SEO Is Not Applicable
+### Authenticated Route — SEO Is Not Applicable for Crawlers
 
-`/business/map` is part of the authenticated business dashboard. Search engines should not (and cannot) index authenticated content, making public SEO irrelevant for this specific route. No `robots.txt` or canonical changes are needed.
-
-**Recommendation:** Add JSON-LD Schema markup for the insured locations as a progressive enhancement — it's low-effort and future-proofs the data if the app ever moves to SSR.
+`/business/map` is part of the authenticated business dashboard. Search engines cannot index authenticated content, so JSON-LD here is not for crawler SEO. It is implemented to:
+- Future-proof the data if the app ever moves to SSR or a public-facing variant
+- Provide structured, machine-readable data for potential integrations (analytics, data pipelines, AI agents)
+- Establish a consistent data pattern across the app from the start
 
 ---
 
