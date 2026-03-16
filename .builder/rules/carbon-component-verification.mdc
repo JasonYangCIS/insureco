@@ -1,0 +1,278 @@
+---
+description: Carbon component naming verification — correct export names, known pitfalls, and import verification process
+globs:
+  - "**/*.jsx"
+  - "**/*.tsx"
+  - "**/*.js"
+alwaysApply: false
+---
+
+# Carbon Component Name Verification
+
+## Why This Matters
+
+Using an incorrect Carbon component name (e.g. `StructuredList` instead of
+`StructuredListWrapper`) does **not** produce a compile-time error in Vite — the
+import resolves to `undefined` silently. React then throws at runtime, which
+**crashes the entire page** and can blank out the whole app.
+
+**Always verify the exact export name before writing an import.**
+
+---
+
+## Verification Process (required before using any Carbon component)
+
+### Step 1 — Check the storybook examples first
+
+Search the existing codebase before assuming a name:
+
+
+Grep: from '@carbon/react'
+Include: src/**/*.{jsx,js,stories.js}
+```
+
+If the component is already imported somewhere in the codebase, use the exact
+same name.
+
+### Step 2 — Check `design-system-docs/AGENTS.md`
+
+The AGENTS.md file lists every available component. If the name in the list
+differs from what you assumed, trust AGENTS.md.
+
+### Step 3 — Check the specific MDX doc
+
+```
+design-system-docs/[ComponentName].mdx
+```
+
+Every import example in the MDX files uses the real export name.
+
+### Step 4 — Never guess compound names
+
+Carbon compound component names are not always predictable:
+- The parent wrapper of a StructuredList is `StructuredListWrapper`, not `StructuredList`
+- The parent wrapper of a DataTable is `DataTable` + `Table`, `TableHead`, etc.
+- `ProgressIndicator` is **banned** in this project — use `StepBreadcrumb`
+
+---
+
+## Known Correct Export Names (verified against codebase)
+
+### StructuredList family
+```jsx
+import {
+  StructuredListWrapper,   // ✅ correct — NOT "StructuredList"
+  StructuredListHead,
+  StructuredListBody,
+  StructuredListRow,
+  StructuredListCell,
+  StructuredListInput,     // for selectable variant
+} from '@carbon/react';
+```
+
+### DataTable family
+```jsx
+import {
+  DataTable,
+  Table,
+  TableHead,
+  TableRow,
+  TableHeader,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableToolbar,
+  TableToolbarSearch,
+  TableSelectRow,
+  TableSelectAll,
+  TableExpandRow,
+  TableExpandedRow,
+} from '@carbon/react';
+```
+
+### Progress components
+```jsx
+import { ProgressBar } from '@carbon/react';          // ✅ linear fill bar
+// ProgressIndicator is BANNED — use StepBreadcrumb
+import StepBreadcrumb from '../components/StepBreadcrumb';
+```
+
+### Modal family
+```jsx
+import {
+  Modal,
+  ComposedModal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+} from '@carbon/react';
+```
+
+### Navigation / UI Shell
+```jsx
+import {
+  Header,
+  HeaderName,
+  HeaderNavigation,
+  HeaderMenuItem,
+  HeaderMenu,
+  HeaderGlobalBar,
+  HeaderGlobalAction,
+  SideNav,
+  SideNavItems,
+  SideNavLink,
+  SideNavMenu,
+  SideNavMenuItem,
+  SkipToContent,
+} from '@carbon/react';
+```
+
+### Form inputs
+```jsx
+import {
+  TextInput,
+  TextArea,
+  PasswordInput,
+  NumberInput,
+  Select,
+  SelectItem,
+  SelectItemGroup,
+  Dropdown,
+  ComboBox,
+  MultiSelect,
+  Checkbox,
+  CheckboxGroup,
+  RadioButton,
+  RadioButtonGroup,
+  Toggle,
+  DatePicker,
+  DatePickerInput,
+  TimePicker,
+  TimePickerSelect,
+  FileUploader,
+  FileUploaderButton,
+  FileUploaderDropContainer,
+  FileUploaderItem,
+  Slider,
+  Search,
+} from '@carbon/react';
+```
+
+### Layout
+```jsx
+import {
+  Grid,
+  Column,
+  Stack,
+  Layer,
+  Theme,
+} from '@carbon/react';
+```
+
+### Tiles
+```jsx
+import {
+  Tile,
+  ClickableTile,
+  ExpandableTile,
+  SelectableTile,
+  RadioTile,
+  TileGroup,
+} from '@carbon/react';
+```
+
+### Feedback & status
+```jsx
+import {
+  InlineNotification,
+  ToastNotification,
+  ActionableNotification,
+  Loading,
+  InlineLoading,
+  ProgressBar,
+  SkeletonText,
+  SkeletonPlaceholder,
+  SkeletonIcon,
+} from '@carbon/react';
+```
+
+### Tags, badges, content
+```jsx
+import {
+  Tag,
+  DismissibleTag,
+  SelectableTag,
+  OperationalTag,
+  Heading,
+  Text,
+  Link,
+  Breadcrumb,
+  BreadcrumbItem,
+  CodeSnippet,
+  CopyButton,
+} from '@carbon/react';
+```
+
+### Overlays
+```jsx
+import {
+  Modal,
+  Popover,
+  PopoverContent,
+  Tooltip,
+  DefinitionTooltip,
+  Toggletip,
+  ToggletipButton,
+  ToggletipContent,
+} from '@carbon/react';
+```
+
+### Lists
+```jsx
+import {
+  OrderedList,
+  UnorderedList,
+  ListItem,
+  ContainedList,
+  ContainedListItem,
+} from '@carbon/react';
+```
+
+---
+
+## Removing Unused Imports
+
+**Always remove imports that are not used in JSX.**
+
+Unused Carbon imports do not cause build errors but they:
+- Increase bundle size (tree-shaking may not catch all cases)
+- Mislead future developers about what is actually used
+- Trigger linter warnings
+
+### Process
+After writing a component, scan the import block and cross-reference with every
+identifier used in the JSX. Remove any that are absent from the JSX.
+
+```jsx
+// ❌ BAD — Grid, Column, Stack, Tile imported but never used
+import { Grid, Column, Stack, Tile, Button, Heading } from '@carbon/react';
+
+// ✅ GOOD — only what is actually rendered
+import { Button, Heading } from '@carbon/react';
+```
+
+---
+
+## Debugging a Blank Page Caused by a Bad Import
+
+When the app goes blank with no compile error in the Vite logs:
+
+1. **Check DevServerLogs** — look for runtime errors, not just SASS warnings
+2. **Search for the component name** in `src/component-examples/` or `src/stories/`
+   to find the correct import spelling used in this project
+3. **Check `design-system-docs/AGENTS.md`** for the authoritative component name
+4. **Look at the MDX doc** for an import code example
+
+The most common cause is a Carbon component resolving to `undefined` at runtime
+because the export name was wrong. React's error will mention something like
+"Element type is invalid — expected a string or a class/function".

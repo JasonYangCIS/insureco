@@ -1,0 +1,122 @@
+@use '../styles/tokens' as *;
+
+// ============================================================
+// DotStepper — compact, mobile-first step progress indicator
+// All colors use design tokens for full light/dark theme support
+// ============================================================
+
+.dot-stepper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-03);
+  width: 100%;
+  padding: var(--spacing-03) 0;
+}
+
+// ── Header row: "Step X of N · Label" ──────────────────────
+
+.dot-stepper__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-03);
+}
+
+.dot-stepper__counter {
+  font-size: var(--body-sm-size);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.dot-stepper__label {
+  font-size: var(--body-md-size);
+  font-weight: var(--font-weight-semibold);
+  color: var(--interactive-primary);
+  text-align: right;
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+// ── Dot track ──────────────────────────────────────────────
+
+.dot-stepper__track {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.dot-stepper__dot {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.25s ease;
+
+  svg {
+    fill: currentColor;
+  }
+
+  &--complete {
+    width: 20px;
+    height: 20px;
+    background: var(--color-success);
+    color: #fff;
+    box-shadow:
+      0 0 0 2px var(--background-primary),
+      0 0 0 3px var(--color-success);
+  }
+
+  &--current {
+    width: 28px;
+    height: 28px;
+    background: var(--interactive-primary);
+    color: #fff;
+    box-shadow:
+      0 0 0 3px var(--background-primary),
+      0 0 0 5px var(--interactive-primary),
+      0 4px 12px rgba(218, 30, 40, 0.3);
+    animation: dot-stepper-pulse 2s ease-in-out infinite;
+  }
+
+  &--upcoming {
+    width: 16px;
+    height: 16px;
+    background: transparent;
+    border: 2px solid var(--border-strong);
+    opacity: 0.5;
+  }
+}
+
+// ── Pulse animation for active dot ─────────────────────────
+
+@keyframes dot-stepper-pulse {
+  0%, 100% {
+    box-shadow:
+      0 0 0 3px var(--background-primary),
+      0 0 0 5px var(--interactive-primary),
+      0 4px 12px rgba(218, 30, 40, 0.3);
+  }
+  50% {
+    box-shadow:
+      0 0 0 3px var(--background-primary),
+      0 0 0 7px rgba(218, 30, 40, 0.35),
+      0 4px 16px rgba(218, 30, 40, 0.2);
+  }
+}
+
+// ── Connector lines between dots ───────────────────────────
+
+.dot-stepper__connector {
+  flex: 1;
+  height: 2px;
+  background: var(--border-subtle);
+  margin: 0 2px;
+
+  &--complete {
+    background: var(--color-success);
+  }
+}

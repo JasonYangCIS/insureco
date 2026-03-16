@@ -50,7 +50,7 @@ Carbon provides a comprehensive set of components. Refer to `design-system-docs/
 
 **Data Display:**
 - `DataTable` (with Table*, TableRow, TableCell components)
-- `StructuredList`
+- `StructuredListWrapper` ⚠️ **NOT** `StructuredList` — using the wrong name causes a silent runtime crash (blank page, no Vite error). Sub-components: `StructuredListHead`, `StructuredListBody`, `StructuredListRow`, `StructuredListCell`, `StructuredListInput`. See `.builder/rules/carbon-component-verification.mdc` for the full verification process.
 - `Tile`, `ClickableTile`, `ExpandableTile`
 
 **Feedback & Status:**
@@ -104,7 +104,7 @@ function MyComponent() {
     </button>
   );
 }
-```
+
 
 ## Component Usage Examples
 
