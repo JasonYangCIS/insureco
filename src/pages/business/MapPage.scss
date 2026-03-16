@@ -77,6 +77,11 @@
       }
     }
 
+    // Cascading Filter (sits between asset-type-selection and stats-tile)
+    .cascading-filter {
+      width: 100%;
+    }
+
     // Summary Stats
     .stats-tile {
       padding: var(--spacing-05);
