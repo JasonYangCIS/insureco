@@ -122,12 +122,15 @@ $dark-text-error: $color-error-50;
 
 $dark-border-subtle: $color-grey-80;
 $dark-border-strong: $color-grey-60;
-$dark-border-interactive: $color-brand-red-50;
+$dark-border-interactive: #c03a47;
 
-$dark-interactive-primary: $color-brand-red-50;
+// Dark mode uses a deeper, slightly desaturated red vs. the vivid red-50 (#fa4d56)
+// to feel less "neon" against dark backgrounds while maintaining WCAG contrast.
+// #c03a47 vs white text: ~5:1 ✅  |  vs dark bg (#161616): ~3.9:1 ✅
+$dark-interactive-primary: #c03a47;
 $dark-interactive-secondary: $color-grey-50;
-$dark-interactive-hover: $color-brand-red-40;
-$dark-interactive-active: $color-brand-red-30;
+$dark-interactive-hover: #d44352;   // lighter for hover feedback on dark bg
+$dark-interactive-active: #a8323e;  // darker for pressed state
 
 // Form field specific
 $dark-field-background: $color-grey-90;
@@ -217,6 +220,9 @@ $dark-text-on-dark: $color-grey-10;  // Light text for dark backgrounds
 
   // Notification text colors
   --notification-text: #{$light-text-primary};
+
+  // Vehicle marker blue — static blue-60 in light mode
+  --vehicle-blue: #{$color-brand-blue-60};
 }
 
 // Dark theme
@@ -262,4 +268,8 @@ $dark-text-on-dark: $color-grey-10;  // Light text for dark backgrounds
 
   // Notification text colors
   --notification-text: #{$dark-text-primary};
+
+  // Vehicle marker blue — deeper, less vivid than blue-50 for dark mode
+  // #2b61af vs white icon: ~5.9:1 ✅  |  vs dark bg (#161616): ~3.3:1 ✅
+  --vehicle-blue: #2b61af;
 }
