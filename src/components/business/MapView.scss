@@ -306,6 +306,55 @@
 }
 
 // ============================================
+// Dark theme — ensure Leaflet chrome stays readable
+// Leaflet injects its own inline backgrounds so we need !important overrides
+// ============================================
+:root[data-carbon-theme="g90"],
+:root[data-carbon-theme="g100"] {
+  // Popup wrapper & tip
+  .leaflet-popup-content-wrapper {
+    background: var(--background-primary) !important;
+    border-color: var(--border-strong) !important;
+    color: var(--text-primary) !important;
+  }
+
+  .leaflet-popup-tip-container .leaflet-popup-tip {
+    background: var(--background-primary) !important;
+  }
+
+  // Close button
+  .leaflet-popup-close-button {
+    color: var(--text-secondary) !important;
+
+    &:hover {
+      color: var(--text-primary) !important;
+      background: var(--background-hover) !important;
+    }
+  }
+
+  // Zoom controls
+  .leaflet-control-zoom a {
+    background-color: var(--background-primary) !important;
+    color: var(--text-primary) !important;
+    border-bottom-color: var(--border-strong) !important;
+
+    &:hover {
+      background-color: var(--background-hover) !important;
+    }
+  }
+
+  // Attribution bar (already transparent over the map)
+  .leaflet-control-attribution {
+    background-color: rgba(22, 22, 22, 0.75) !important;
+    color: var(--text-secondary) !important;
+
+    a {
+      color: var(--interactive-primary) !important;
+    }
+  }
+}
+
+// ============================================
 // Responsive
 // ============================================
 

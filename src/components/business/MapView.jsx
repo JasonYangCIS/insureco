@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import { useTheme } from '../../contexts/ThemeContext';
 import MarkerClusterGroup from 'react-leaflet-cluster';
 import L from 'leaflet';
 import { Button, Tag } from '@carbon/react';
@@ -97,8 +98,37 @@ function FitBounds({ positions }) {
  * MapView - Reusable Leaflet map component
  * Displays properties and vehicles on an interactive map
  */
+// Tile layer configurations
+const TILE_LAYERS = {
+  light: {
+    url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    attribution:
+      '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors',
+  },
+  dark: {
+    url: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+    attribution:
+      '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>',
+  },
+};
+
+// Internal sub-component that can read the map instance and swap tile layers reactively
+function ThemedTileLayer({ isDark }) {
+  const tileConfig = isDark ? TILE_LAYERS.dark : TILE_LAYERS.light;
+
+  return (
+    <TileLayer
+      key={isDark ? 'dark' : 'light'}
+      attribution={tileConfig.attribution}
+      url={tileConfig.url}
+      maxZoom={19}
+    />
+  );
+}
+
 export default function MapView({ properties = [], vehicles = [], selectedAssetType = 'all' }) {
   const navigate = useNavigate();
+  const { isDark } = useTheme();
 
   // Determine which assets to show
   const showProperties = selectedAssetType === 'all' || selectedAssetType === 'properties';
@@ -141,10 +171,7 @@ export default function MapView({ properties = [], vehicles = [], selectedAssetT
         className="leaflet-map"
         scrollWheelZoom={true}
       >
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
+        <ThemedTileLayer isDark={isDark} />
 
         {/* Fit bounds to all markers */}
         <FitBounds positions={allPositions} />
