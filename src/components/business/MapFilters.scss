@@ -270,15 +270,44 @@
     gap: var(--spacing-03);
     min-height: 36px; // WCAG tap target
 
-    // Make Carbon checkbox occupy available space
+    // Override Carbon's default column-direction on the wrapper so the row
+    // stays horizontal and aligns correctly at all breakpoints.
     .cds--checkbox-wrapper {
       flex: 1;
       min-width: 0;
+      // Carbon sets flex-direction:column on .cds--form-item; reset it so
+      // the wrapper participates in our flex row without extra height.
+      flex-direction: row !important;
+      align-items: center !important;
+      margin-bottom: 0 !important;
     }
 
     .cds--checkbox-label {
       font-size: var(--font-size-md);
       color: var(--text-primary) !important;
+      // Ensure the pseudo-element checkbox box is vertically centred with
+      // the label text, even when the text wraps on narrow screens.
+      display: flex !important;
+      align-items: center !important;
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+
+      &::before {
+        // Keep the checkbox box centred; Carbon places it with top:2px by
+        // default which misaligns on wrap. Use margin-top to compensate.
+        position: relative !important;
+        top: auto !important;
+        margin-top: 0 !important;
+        flex-shrink: 0;
+      }
+
+      &::after {
+        // The checkmark SVG must stay anchored relative to ::before; since
+        // we switched ::before to relative, keep ::after absolute so it
+        // continues to sit on top of the box.
+        top: 50% !important;
+        transform: translateY(-50%) !important;
+      }
     }
 
     // Ensure checkbox is visible in both themes
@@ -292,9 +321,11 @@
     }
   }
 
-  // Option item count
+  // Option item count — stays vertically centred thanks to the parent
+  // align-items:center; align-self ensures it never drifts on mobile.
   &__option-count {
     flex-shrink: 0;
+    align-self: center;
     font-size: var(--font-size-sm);
     color: var(--text-secondary);
     min-width: 24px;
