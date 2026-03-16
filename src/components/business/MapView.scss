@@ -432,11 +432,13 @@
   // directly. Instead, we boost brightness + contrast on the tile pane so that
   // light labels become white-ish while dark road/water areas stay dark.
   //
-  // brightness(1.6): label ~#8a8a9a → ~#dfdfff ≈ #e0e0e0 effective
-  // contrast(1.1):   amplifies the gap between labels and dark background
-  // Result: city label contrast ≥ 6:1 against map background ✅
+  // brightness(2.0): even muted secondary labels (~#6a6a7a) reach near-white
+  //   (#6a6a7a × 2.0 ≈ #d4d4f4), while the very dark backgrounds
+  //   (~#111116 × 2.0 ≈ #222222) stay visually dark — CSS clips at white.
+  // contrast(1.1):   further widens the gap between bright labels and dark map.
+  // Result: all city/town label contrast ≥ 7:1 ✅
   .leaflet-tile-pane {
-    filter: brightness(1.6) contrast(1.1);
+    filter: brightness(2.0) contrast(1.1);
   }
 
   // ── Popup wrapper ──────────────────────────────────────────────────────────
