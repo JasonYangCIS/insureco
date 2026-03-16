@@ -510,6 +510,52 @@
 }
 
 // ============================================
+// Radio Buttons
+// ============================================
+// IMPORTANT: High specificity required to override Carbon's defaults.
+// Carbon's RadioButton appearance (the circle) uses hardcoded border colors
+// that don't adapt to custom themes, causing invisible circles in dark mode
+// against dark backgrounds.
+
+.cds--radio-button-group .cds--radio-button__label .cds--radio-button__appearance,
+.cds--radio-button-wrapper .cds--radio-button__label .cds--radio-button__appearance {
+  border-color: var(--text-primary) !important;
+  background-color: transparent !important;
+}
+
+// Checked state — outer ring + filled inner dot
+.cds--radio-button:checked
+  + .cds--radio-button__label
+  .cds--radio-button__appearance {
+  border-color: var(--interactive-primary) !important;
+  background-color: transparent !important;
+
+  &::before {
+    background-color: var(--interactive-primary) !important;
+  }
+}
+
+// Focus ring
+.cds--radio-button:focus
+  + .cds--radio-button__label
+  .cds--radio-button__appearance {
+  outline: 2px solid var(--interactive-primary) !important;
+  outline-offset: 2px;
+}
+
+// Disabled state
+.cds--radio-button:disabled
+  + .cds--radio-button__label
+  .cds--radio-button__appearance {
+  border-color: var(--text-tertiary) !important;
+  cursor: not-allowed;
+}
+
+.cds--radio-button__label-text {
+  color: var(--text-primary) !important;
+}
+
+// ============================================
 // Checkboxes
 // ============================================
 // IMPORTANT: Override Carbon checkbox styles for theme support
