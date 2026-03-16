@@ -268,39 +268,59 @@
     display: flex;
     align-items: center;
     gap: var(--spacing-03);
-    min-height: 36px; // WCAG tap target
+    // Padding gives the row its height naturally so the checkbox label sits
+    // flush with its container rather than floating in a min-height void.
+    padding: 8px 0;
 
-    // Carbon's .cds--form-item adds a bottom margin that pushes the row out
-    // of alignment on mobile. Remove it without touching any internal layout.
+    // Remove the stray bottom margin Carbon adds via .cds--form-item.
     .cds--checkbox-wrapper {
       flex: 1;
       min-width: 0;
       margin-bottom: 0 !important;
     }
 
-    // Keep Carbon's own ::before / ::after intact — only set text colour.
+    // Colour only — leave all Carbon layout/sizing rules intact.
     .cds--checkbox-label {
-      font-size: var(--font-size-md);
       color: var(--text-primary) !important;
     }
 
-    // Ensure checkbox box colour matches the brand theme
+    // Brand colours for the checkbox box (::before).
+    .cds--checkbox-label::before {
+      border-color: var(--border-strong) !important;
+    }
+
     .cds--checkbox:checked + .cds--checkbox-label::before {
       background-color: var(--interactive-primary) !important;
       border-color: var(--interactive-primary) !important;
     }
 
-    .cds--checkbox-label::before {
-      border-color: var(--border-strong) !important;
+    // ── White checkmark centering ────────────────────────────────────────
+    // Carbon's default places the ::after element at inset-block-start: 6.5px
+    // (a sub-pixel value) with margin-block-start: -3px, giving a net top of
+    // 3.5 px from the label.  The 16 × 16 ::before box starts at 3 px, so its
+    // centre is at 11 px from the label top.
+    //
+    // Using the CSS rotate(-45deg) matrix with transform-origin:bottom right
+    // the checkmark bounding-box centre lands at ≈ 9.9 px — roughly 1 px
+    // above the box centre, visible as an off-centre tick on high-DPI mobile.
+    //
+    // Shifting the element down by 1.5 px (to net top = 5 px, using whole
+    // integers only to avoid new sub-pixel artefacts) re-centres it:
+    //   inset-block-start: 8px − margin-block-start: 3px = 5 px net top
+    //   → rotated bounding-box centre ≈ 11.4 px ≈ box centre (11 px) ✓
+    .cds--checkbox:checked + .cds--checkbox-label::after,
+    .cds--checkbox:indeterminate + .cds--checkbox-label::after {
+      inset-block-start: 8px !important;    // was 6.5 px (sub-pixel)
+      inset-inline-start: 7px !important;   // unchanged — already centred H
+      margin-block-start: -3px !important;  // unchanged
     }
   }
 
-  // Count number — explicit align-self so it stays vertically centred with
-  // the checkbox on mobile regardless of label-text height.
+  // Count number stays centred via the parent's align-items: center.
   &__option-count {
     flex-shrink: 0;
     align-self: center;
-    font-size: var(--font-size-sm);
+    font-size: 0.75rem;
     color: var(--text-secondary);
     min-width: 24px;
     text-align: right;
