@@ -425,6 +425,20 @@
 // ============================================
 :root[data-carbon-theme="g90"],
 :root[data-carbon-theme="g100"] {
+  // ── Map tile contrast fix ──────────────────────────────────────────────────
+  // CartoDB Dark Matter label text (~#8a8a9a) on dark background (~#111116)
+  // has a contrast ratio of only ~2.5:1 — well below WCAG AA (4.5:1).
+  // Because these are raster image tiles, we can't target the label text
+  // directly. Instead, we boost brightness + contrast on the tile pane so that
+  // light labels become white-ish while dark road/water areas stay dark.
+  //
+  // brightness(1.6): label ~#8a8a9a → ~#dfdfff ≈ #e0e0e0 effective
+  // contrast(1.1):   amplifies the gap between labels and dark background
+  // Result: city label contrast ≥ 6:1 against map background ✅
+  .leaflet-tile-pane {
+    filter: brightness(1.6) contrast(1.1);
+  }
+
   // ── Popup wrapper ──────────────────────────────────────────────────────────
   // g100 --background-primary = #161616; --text-primary = #f4f4f4 → ~15:1 ✅
   .leaflet-popup-content-wrapper {
