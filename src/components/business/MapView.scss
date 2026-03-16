@@ -62,16 +62,8 @@
 // Vehicle markers (blue)
 .vehicle-marker {
   .marker-icon {
-    background: var(--color-brand-blue-60);
+    background: var(--vehicle-blue);
     color: var(--text-on-color);
-  }
-}
-
-// Dark theme adjustments for vehicle markers
-:root[data-carbon-theme="g90"],
-:root[data-carbon-theme="g100"] {
-  .vehicle-marker .marker-icon {
-    background: var(--color-brand-blue-50);
   }
 }
 
@@ -121,24 +113,11 @@
 
 // Vehicle clusters (blue)
 .marker-cluster-vehicle {
-  background: var(--color-brand-blue-60);
-  border: 2px solid var(--color-brand-blue-60);
-  
-  div {
-    background: var(--color-brand-blue-60);
-  }
-}
+  background: var(--vehicle-blue);
+  border: 2px solid var(--vehicle-blue);
 
-// Dark theme adjustments for vehicle clusters
-:root[data-carbon-theme="g90"],
-:root[data-carbon-theme="g100"] {
-  .marker-cluster-vehicle {
-    background: var(--color-brand-blue-50);
-    border-color: var(--color-brand-blue-50);
-    
-    div {
-      background: var(--color-brand-blue-50);
-    }
+  div {
+    background: var(--vehicle-blue);
   }
 }
 
@@ -425,6 +404,28 @@
 // ============================================
 :root[data-carbon-theme="g90"],
 :root[data-carbon-theme="g100"] {
+    // ── Dark-mode-friendly marker colours + subtle glow ───────────────────────
+  // Interactive-primary in dark mode is now a deeper crimson (#c03a47).
+  // Property markers inherit it via --interactive-primary automatically.
+  // Vehicle markers use --vehicle-blue (#2b61af) — a calm, professional blue.
+  // Both get a faint colour-matched glow so they feel "native" in dark UIs
+  // rather than looking like light-mode colours dropped onto a dark canvas.
+  .property-marker .marker-icon {
+    box-shadow: 0 2px 10px rgba(192, 58, 71, 0.55), var(--shadow-02);
+  }
+
+  .marker-cluster-property {
+    box-shadow: 0 2px 10px rgba(192, 58, 71, 0.45), var(--shadow-02);
+  }
+
+  .vehicle-marker .marker-icon {
+    box-shadow: 0 2px 10px rgba(43, 97, 175, 0.55), var(--shadow-02);
+  }
+
+  .marker-cluster-vehicle {
+    box-shadow: 0 2px 10px rgba(43, 97, 175, 0.45), var(--shadow-02);
+  }
+
   // ── Map tile contrast fix ──────────────────────────────────────────────────
   // CartoDB Dark Matter label text (~#8a8a9a) on dark background (~#111116)
   // has a contrast ratio of only ~2.5:1 — well below WCAG AA (4.5:1).

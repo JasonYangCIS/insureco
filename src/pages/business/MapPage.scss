@@ -169,7 +169,7 @@
       }
 
       .vehicle-legend {
-        background: var(--color-brand-blue-60);
+        background: var(--vehicle-blue);
       }
 
       .legend-label {
@@ -182,18 +182,9 @@
 }
 
 // Dark theme adjustments
-:root[data-carbon-theme="g90"],
-:root[data-carbon-theme="g100"] {
-  .map-page {
-    .sidebar-column {
-      .legend-tile {
-        .vehicle-legend {
-          background: var(--color-brand-blue-50);
-        }
-      }
-    }
-  }
-}
+// Property legend inherits --interactive-primary automatically (now #c03a47 in dark mode).
+// Vehicle legend inherits --vehicle-blue automatically (now #2b61af in dark mode).
+// Both tokens are defined per-theme in tokens/colors.scss — no extra overrides needed here.
 
 // ============================================
 // Responsive Layout
