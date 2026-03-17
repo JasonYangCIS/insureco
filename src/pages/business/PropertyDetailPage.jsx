@@ -73,11 +73,9 @@ export default function PropertyDetailPage() {
         <div className="header-content">
           <Button
             kind="ghost"
-            renderIcon={ArrowLeft}
-            iconDescription="Back"
             onClick={() => navigate('/business/properties')}
           >
-            Back
+            <ArrowLeft className="btn-icon-left" /> Back
           </Button>
           <div className="header-title">
             <Building size={32} className="page-icon" />

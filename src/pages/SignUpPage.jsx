@@ -638,10 +638,8 @@ export default function SignUpPage() {
               <Button
                 kind="secondary"
                 onClick={handleBack}
-                renderIcon={ArrowLeft}
-                iconDescription="Go back"
               >
-                Back
+                <ArrowLeft className="btn-icon-left" /> Back
               </Button>
             )}
 

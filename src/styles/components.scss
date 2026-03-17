@@ -19,6 +19,12 @@
   }
 }
 
+// Icon positioned on the left side of button text (e.g. Back buttons)
+.btn-icon-left {
+  margin-right: var(--spacing-02);
+  vertical-align: middle;
+}
+
 // ============================================
 // Cards/Tiles
 // ============================================
