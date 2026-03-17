@@ -446,11 +446,10 @@ export default function FileClaimPage() {
         <div className="navigation-buttons">
           <Button
             kind="secondary"
-            renderIcon={ArrowLeft}
             onClick={handleBack}
             disabled={currentStep === 0}
           >
-            Back
+            <ArrowLeft className="btn-icon-left" /> Back
           </Button>
 
           <div className="right-buttons">
