@@ -1,7 +1,10 @@
 import React from 'react';
 import { Tag } from '@carbon/react';
+import { useMapFilters } from './MapFiltersContext';
 
-export default function MapFiltersActiveTags({ activeTags, onRemoveTag }) {
+export default function MapFiltersActiveTags() {
+  const { activeTags, handleRemoveTag } = useMapFilters();
+
   if (!activeTags || activeTags.length === 0) return null;
 
   return (
@@ -12,7 +15,7 @@ export default function MapFiltersActiveTags({ activeTags, onRemoveTag }) {
           type="blue"
           filter
           title={`Remove ${facetLabel}: ${displayLabel}`}
-          onClose={() => onRemoveTag(facetKey, value)}
+          onClose={() => handleRemoveTag(facetKey, value)}
           role="listitem"
         >
           {displayLabel}

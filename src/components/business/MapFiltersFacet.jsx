@@ -1,17 +1,20 @@
 import React from 'react';
 import { Checkbox } from '@carbon/react';
 import { ChevronDown, ChevronUp, Close } from '@carbon/icons-react';
+import { useMapFilters } from './MapFiltersContext';
 
-export default function MapFiltersFacet({
-  facet,
-  isOpen,
-  selectedFilters,
-  searchQuery,
-  searchable,
-  onToggleSection,
-  onClearFacet,
-  onOptionToggle,
-}) {
+export default function MapFiltersFacet({ facet }) {
+  const {
+    openSections,
+    selectedFilters,
+    searchQuery,
+    searchable,
+    toggleSection,
+    handleClearFacet,
+    handleOptionToggle,
+  } = useMapFilters();
+
+  const isOpen = openSections[facet.key] ?? true;
   const selectedCount = (selectedFilters[facet.key] || []).length;
 
   const getFilteredOptions = () => {
@@ -27,7 +30,7 @@ export default function MapFiltersFacet({
       {/* Facet header / accordion trigger */}
       <button
         className="map-filters__facet-header"
-        onClick={() => onToggleSection(facet.key)}
+        onClick={() => toggleSection(facet.key)}
         aria-expanded={isOpen}
         aria-controls={`filter-section-${facet.key}`}
       >
@@ -48,7 +51,7 @@ export default function MapFiltersFacet({
               className="map-filters__facet-clear"
               onClick={(e) => {
                 e.stopPropagation();
-                onClearFacet(facet.key);
+                handleClearFacet(facet.key);
               }}
               aria-label={`Clear ${facet.label} filter`}
               tabIndex={0}
@@ -85,7 +88,7 @@ export default function MapFiltersFacet({
                     id={`filter-${facet.key}-${option.value}`}
                     labelText={option.label}
                     checked={isChecked}
-                    onChange={() => onOptionToggle(facet.key, option.value)}
+                    onChange={() => handleOptionToggle(facet.key, option.value)}
                   />
                   {option.count !== undefined && (
                     <span

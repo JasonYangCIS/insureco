@@ -1,7 +1,10 @@
 import React from 'react';
 import { Filter } from '@carbon/icons-react';
+import { useMapFilters } from './MapFiltersContext';
 
-export default function MapFiltersHeader({ totalActive, onClearAll }) {
+export default function MapFiltersHeader() {
+  const { totalActive, handleClearAll } = useMapFilters();
+
   return (
     <div className="map-filters__header">
       <div className="map-filters__title-row">
@@ -16,7 +19,7 @@ export default function MapFiltersHeader({ totalActive, onClearAll }) {
       {totalActive > 0 && (
         <button
           className="map-filters__clear-all"
-          onClick={onClearAll}
+          onClick={handleClearAll}
           aria-label="Clear all filters"
         >
           Clear all
