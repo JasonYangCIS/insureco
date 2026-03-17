@@ -294,25 +294,38 @@
       border-color: var(--interactive-primary) !important;
     }
 
-    // ── White checkmark centering ────────────────────────────────────────
-    // Carbon's default places the ::after element at inset-block-start: 6.5px
-    // (a sub-pixel value) with margin-block-start: -3px, giving a net top of
-    // 3.5 px from the label.  The 16 × 16 ::before box starts at 3 px, so its
-    // centre is at 11 px from the label top.
+    // ── White checkmark — perfectly centred SVG ─────────────────────────
+    // Carbon's ::after is a rotated L-shape anchored at transform-origin:
+    // bottom right. No amount of positional tweaking can truly centre it
+    // because the visual weight of the L always reads off-centre.
     //
-    // Using the CSS rotate(-45deg) matrix with transform-origin:bottom right
-    // the checkmark bounding-box centre lands at ≈ 9.9 px — roughly 1 px
-    // above the box centre, visible as an off-centre tick on high-DPI mobile.
+    // Solution: when checked, overlay the ::after over the entire 16×16
+    // ::before box and draw the ✓ as a background SVG whose viewBox matches
+    // the box dimensions. The path is authored to sit visually centred.
     //
-    // Shifting the element down by 1.5 px (to net top = 5 px, using whole
-    // integers only to avoid new sub-pixel artefacts) re-centres it:
-    //   inset-block-start: 8px − margin-block-start: 3px = 5 px net top
-    //   → rotated bounding-box centre ≈ 11.4 px ≈ box centre (11 px) ✓
+    // ::before box geometry (from Carbon source):
+    //   inset-block-start: 2px + margin-top: 1px = 3px from label top
+    //   margin-inline-start: 3px from label left
+    //   size: 16 × 16 px
     .cds--checkbox:checked + .cds--checkbox-label::after,
     .cds--checkbox:indeterminate + .cds--checkbox-label::after {
-      inset-block-start: 8px !important;    // was 6.5 px (sub-pixel)
-      inset-inline-start: 7px !important;   // unchanged — already centred H
-      margin-block-start: -3px !important;  // unchanged
+      // Cover the ::before box exactly.
+      inset-block-start: 3px !important;
+      inset-inline-start: 3px !important;
+      block-size: 16px !important;
+      inline-size: 16px !important;
+      margin-block-start: 0 !important;
+
+      // Remove Carbon's L-shape borders; draw the ✓ as an SVG instead.
+      border: none !important;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M2 8 L6 12 L14 4' fill='none' stroke='%23ffffff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") !important;
+      background-repeat: no-repeat !important;
+      background-position: center !important;
+      background-size: contain !important;
+
+      // Scale in from the centre for a clean animation.
+      transform: scale(1) !important;
+      transform-origin: center !important;
     }
   }
 
