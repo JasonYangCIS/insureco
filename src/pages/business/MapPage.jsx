@@ -8,7 +8,7 @@ import {
   RadioButton,
 } from '@carbon/react';
 import MapView from '../../components/business/MapView';
-import MapFilters from '../../components/business/MapFilters';
+import MapFilters from '../../components/business/MapFilters/MapFilters';
 import { mockProperties, mockVehicles } from '../../data/businessMockData';
 import { formatCurrency } from '../../utils/businessHelpers';
 import './MapPage.scss';
