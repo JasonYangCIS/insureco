@@ -1,7 +1,7 @@
 import React from 'react';
 import { Tag } from '@carbon/react';
-import { useMapFiltersState, useMapFiltersDispatch } from './MapFiltersContext';
-import './MapFiltersActiveTags.scss';
+import { useMapFiltersState, useMapFiltersDispatch } from '../Context/Context';
+import './ActiveTags.scss';
 
 export default function MapFiltersActiveTags() {
   const { activeTags } = useMapFiltersState();

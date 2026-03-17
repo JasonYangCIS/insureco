@@ -1,9 +1,9 @@
 import React from 'react';
 import { Search } from '@carbon/react';
-import MapFiltersHeader from './MapFiltersHeader';
-import MapFiltersActiveTags from './MapFiltersActiveTags';
-import MapFiltersFacet from './MapFiltersFacet';
-import { MapFiltersProvider, useMapFiltersState, useMapFiltersDispatch } from './MapFiltersContext';
+import MapFiltersHeader from './Header/Header';
+import MapFiltersActiveTags from './ActiveTags/ActiveTags';
+import MapFiltersFacet from './Facet/Facet';
+import { MapFiltersProvider, useMapFiltersState, useMapFiltersDispatch } from './Context/Context';
 import './MapFilters.scss';
 
 function MapFiltersLayout() {

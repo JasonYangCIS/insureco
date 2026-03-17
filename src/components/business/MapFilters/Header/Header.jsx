@@ -1,7 +1,7 @@
 import React from 'react';
 import { Filter } from '@carbon/icons-react';
-import { useMapFiltersState, useMapFiltersDispatch } from './MapFiltersContext';
-import './MapFiltersHeader.scss';
+import { useMapFiltersState, useMapFiltersDispatch } from '../Context/Context';
+import './Header.scss';
 
 export default function MapFiltersHeader() {
   const { totalActive } = useMapFiltersState();
