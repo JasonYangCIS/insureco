@@ -28,9 +28,17 @@ export default function MapFiltersFacet({ facet }) {
   return (
     <div className="map-filters__facet">
       {/* Facet header / accordion trigger */}
-      <button
+      <div
         className="map-filters__facet-header"
         onClick={() => toggleSection(facet.key)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            toggleSection(facet.key);
+          }
+        }}
+        role="button"
+        tabIndex={0}
         aria-expanded={isOpen}
         aria-controls={`filter-section-${facet.key}`}
       >
@@ -65,7 +73,7 @@ export default function MapFiltersFacet({ facet }) {
             <ChevronDown size={16} aria-hidden="true" />
           )}
         </div>
-      </button>
+      </div>
 
       {/* Facet options */}
       {isOpen && (
