@@ -1,0 +1,34 @@
+@use '../../../styles/tokens' as *;
+
+// ============================================
+// MapFilters — Inline accordion filter panel
+// ============================================
+
+.map-filters {
+  display: flex;
+  flex-direction: column;
+
+  &__search {
+    padding: var(--spacing-03) var(--spacing-05);
+    border-bottom: 1px solid var(--border-subtle);
+
+    .cds--search {
+      width: 100%;
+    }
+
+    .cds--search-input {
+      background: var(--field-background) !important;
+      color: var(--field-text) !important;
+      border-bottom-color: var(--border-subtle) !important;
+    }
+
+    .cds--search-magnifier-icon {
+      fill: var(--text-secondary) !important;
+    }
+  }
+
+  &__facets {
+    display: flex;
+    flex-direction: column;
+  }
+}

@@ -1,0 +1,45 @@
+@use '../../../../styles/tokens' as *;
+
+.map-filters {
+  &__active-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-02);
+    padding: var(--spacing-03) var(--spacing-05);
+    border-bottom: 1px solid var(--border-subtle);
+    background: var(--background-secondary);
+
+    .cds--tag {
+      font-size: 12px;
+      max-width: 180px;
+
+      .cds--tag__label {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .cds--tag__close-icon {
+        color: inherit;
+
+        &:hover {
+          background: rgba(0, 0, 0, 0.1);
+          border-radius: 50%;
+        }
+      }
+    }
+  }
+}
+
+:root[data-carbon-theme='g90'],
+:root[data-carbon-theme='g100'] {
+  .map-filters__active-tags {
+    background: var(--background-tertiary);
+  }
+}
+
+@media (max-width: 672px) {
+  .map-filters__active-tags {
+    padding: var(--spacing-03) var(--spacing-04);
+  }
+}
