@@ -3,11 +3,12 @@ import { Search } from '@carbon/react';
 import MapFiltersHeader from './MapFiltersHeader';
 import MapFiltersActiveTags from './MapFiltersActiveTags';
 import MapFiltersFacet from './MapFiltersFacet';
-import { MapFiltersProvider, useMapFilters } from './MapFiltersContext';
+import { MapFiltersProvider, useMapFiltersState, useMapFiltersDispatch } from './MapFiltersContext';
 import './MapFilters.scss';
 
 function MapFiltersLayout() {
-  const { searchable, searchQuery, setSearchQuery, facets } = useMapFilters();
+  const { searchable, searchQuery, facets } = useMapFiltersState();
+  const { setSearchQuery } = useMapFiltersDispatch();
 
   return (
     <div className="map-filters" role="search" aria-label="Map filters">

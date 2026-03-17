@@ -1,9 +1,11 @@
 import React from 'react';
 import { Tag } from '@carbon/react';
-import { useMapFilters } from './MapFiltersContext';
+import { useMapFiltersState, useMapFiltersDispatch } from './MapFiltersContext';
+import './MapFiltersActiveTags.scss';
 
 export default function MapFiltersActiveTags() {
-  const { activeTags, handleRemoveTag } = useMapFilters();
+  const { activeTags } = useMapFiltersState();
+  const { handleRemoveTag } = useMapFiltersDispatch();
 
   if (!activeTags || activeTags.length === 0) return null;
 

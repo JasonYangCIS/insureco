@@ -1,6 +1,38 @@
-import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
+import React, { createContext, useContext, useReducer, useEffect, useMemo, useRef } from 'react';
 
-const MapFiltersContext = createContext(null);
+const MapFiltersStateContext = createContext(null);
+const MapFiltersDispatchContext = createContext(null);
+
+function mapFiltersReducer(state, action) {
+  switch (action.type) {
+    case 'TOGGLE_SECTION':
+      return {
+        ...state,
+        openSections: {
+          ...state.openSections,
+          [action.key]: !state.openSections[action.key],
+        },
+      };
+    case 'SET_SEARCH_QUERY':
+      return {
+        ...state,
+        searchQuery: action.payload,
+      };
+    case 'SYNC_FACETS': {
+      const nextOpenSections = { ...state.openSections };
+      let changed = false;
+      action.facets.forEach((f) => {
+        if (!(f.key in nextOpenSections)) {
+          nextOpenSections[f.key] = true;
+          changed = true;
+        }
+      });
+      return changed ? { ...state, openSections: nextOpenSections } : state;
+    }
+    default:
+      throw new Error(`Unhandled action type: ${action.type}`);
+  }
+}
 
 export function MapFiltersProvider({
   facets = [],
@@ -9,16 +41,21 @@ export function MapFiltersProvider({
   searchable = false,
   children,
 }) {
-  // Track which accordion sections are open (all open by default)
-  const [openSections, setOpenSections] = useState(() =>
-    Object.fromEntries(facets.map((f) => [f.key, true]))
-  );
+  const [state, dispatch] = useReducer(mapFiltersReducer, {
+    openSections: Object.fromEntries(facets.map((f) => [f.key, true])),
+    searchQuery: '',
+  });
 
-  // Search query for location-type facets
-  const [searchQuery, setSearchQuery] = useState('');
+  // Keep a stable ref to external props to prevent dispatch context from recreating on every selection change
+  const selectedFiltersRef = useRef(selectedFilters);
+  const onFiltersChangeRef = useRef(onFiltersChange);
+  
+  useEffect(() => {
+    selectedFiltersRef.current = selectedFilters;
+    onFiltersChangeRef.current = onFiltersChange;
+  }, [selectedFilters, onFiltersChange]);
 
-  // ─── Helpers ────────────────────────────────────────────────────────────────
-
+  // Derived state
   const totalActive = useMemo(
     () =>
       Object.values(selectedFilters).reduce(
@@ -27,33 +64,6 @@ export function MapFiltersProvider({
       ),
     [selectedFilters]
   );
-
-  const toggleSection = (key) =>
-    setOpenSections((prev) => ({ ...prev, [key]: !prev[key] }));
-
-  const handleOptionToggle = (facetKey, optionValue) => {
-    const current = selectedFilters[facetKey] || [];
-    const updated = current.includes(optionValue)
-      ? current.filter((v) => v !== optionValue)
-      : [...current, optionValue];
-    onFiltersChange({ ...selectedFilters, [facetKey]: updated });
-  };
-
-  const handleClearFacet = (facetKey) => {
-    onFiltersChange({ ...selectedFilters, [facetKey]: [] });
-  };
-
-  const handleClearAll = () => {
-    const cleared = Object.fromEntries(Object.keys(selectedFilters).map((k) => [k, []]));
-    onFiltersChange(cleared);
-  };
-
-  const handleRemoveTag = (facetKey, value) => {
-    const updated = (selectedFilters[facetKey] || []).filter((v) => v !== value);
-    onFiltersChange({ ...selectedFilters, [facetKey]: updated });
-  };
-
-  // ─── Build active tag list ───────────────────────────────────────────────────
 
   const activeTags = useMemo(
     () =>
@@ -69,50 +79,77 @@ export function MapFiltersProvider({
     [facets, selectedFilters]
   );
 
-  // ─── Ensure new facets open by default when facets prop changes ─────────────
-
+  // Sync missing facets to open by default
   useEffect(() => {
-    setOpenSections((prev) => {
-      const next = { ...prev };
-      let changed = false;
-      facets.forEach((f) => {
-        if (!(f.key in next)) {
-          next[f.key] = true;
-          changed = true;
-        }
-      });
-      return changed ? next : prev;
-    });
-    setSearchQuery('');
+    dispatch({ type: 'SYNC_FACETS', facets });
+    dispatch({ type: 'SET_SEARCH_QUERY', payload: '' });
   }, [facets]);
 
-  const value = {
-    facets,
-    selectedFilters,
-    searchable,
-    openSections,
-    searchQuery,
-    setSearchQuery,
-    totalActive,
-    activeTags,
-    toggleSection,
-    handleOptionToggle,
-    handleClearFacet,
-    handleClearAll,
-    handleRemoveTag,
-  };
+  const stateValue = useMemo(
+    () => ({
+      ...state,
+      facets,
+      selectedFilters,
+      searchable,
+      totalActive,
+      activeTags,
+    }),
+    [state, facets, selectedFilters, searchable, totalActive, activeTags]
+  );
+
+  const dispatchValue = useMemo(() => {
+    return {
+      dispatch,
+      toggleSection: (key) => dispatch({ type: 'TOGGLE_SECTION', key }),
+      setSearchQuery: (payload) => dispatch({ type: 'SET_SEARCH_QUERY', payload }),
+      
+      // Filter mutation handlers
+      handleOptionToggle: (facetKey, optionValue) => {
+        const current = selectedFiltersRef.current[facetKey] || [];
+        const updated = current.includes(optionValue)
+          ? current.filter((v) => v !== optionValue)
+          : [...current, optionValue];
+        onFiltersChangeRef.current?.({ ...selectedFiltersRef.current, [facetKey]: updated });
+      },
+      handleClearFacet: (facetKey) => {
+        onFiltersChangeRef.current?.({ ...selectedFiltersRef.current, [facetKey]: [] });
+      },
+      handleClearAll: () => {
+        const cleared = Object.fromEntries(
+          Object.keys(selectedFiltersRef.current).map((k) => [k, []])
+        );
+        onFiltersChangeRef.current?.(cleared);
+      },
+      handleRemoveTag: (facetKey, value) => {
+        const updated = (selectedFiltersRef.current[facetKey] || []).filter(
+          (v) => v !== value
+        );
+        onFiltersChangeRef.current?.({ ...selectedFiltersRef.current, [facetKey]: updated });
+      },
+    };
+  }, []); // Empty dependency array ensures dispatch context is completely stable
 
   return (
-    <MapFiltersContext.Provider value={value}>
-      {children}
-    </MapFiltersContext.Provider>
+    <MapFiltersStateContext.Provider value={stateValue}>
+      <MapFiltersDispatchContext.Provider value={dispatchValue}>
+        {children}
+      </MapFiltersDispatchContext.Provider>
+    </MapFiltersStateContext.Provider>
   );
 }
 
-export function useMapFilters() {
-  const context = useContext(MapFiltersContext);
-  if (!context) {
-    throw new Error('useMapFilters must be used within a MapFiltersProvider');
+export function useMapFiltersState() {
+  const context = useContext(MapFiltersStateContext);
+  if (context === undefined || context === null) {
+    throw new Error('useMapFiltersState must be used within a MapFiltersProvider');
+  }
+  return context;
+}
+
+export function useMapFiltersDispatch() {
+  const context = useContext(MapFiltersDispatchContext);
+  if (context === undefined || context === null) {
+    throw new Error('useMapFiltersDispatch must be used within a MapFiltersProvider');
   }
   return context;
 }

@@ -1,9 +1,11 @@
 import React from 'react';
 import { Filter } from '@carbon/icons-react';
-import { useMapFilters } from './MapFiltersContext';
+import { useMapFiltersState, useMapFiltersDispatch } from './MapFiltersContext';
+import './MapFiltersHeader.scss';
 
 export default function MapFiltersHeader() {
-  const { totalActive, handleClearAll } = useMapFilters();
+  const { totalActive } = useMapFiltersState();
+  const { handleClearAll } = useMapFiltersDispatch();
 
   return (
     <div className="map-filters__header">

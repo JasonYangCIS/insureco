@@ -1,18 +1,12 @@
 import React from 'react';
 import { Checkbox } from '@carbon/react';
 import { ChevronDown, ChevronUp, Close } from '@carbon/icons-react';
-import { useMapFilters } from './MapFiltersContext';
+import { useMapFiltersState, useMapFiltersDispatch } from './MapFiltersContext';
+import './MapFiltersFacet.scss';
 
 export default function MapFiltersFacet({ facet }) {
-  const {
-    openSections,
-    selectedFilters,
-    searchQuery,
-    searchable,
-    toggleSection,
-    handleClearFacet,
-    handleOptionToggle,
-  } = useMapFilters();
+  const { openSections, selectedFilters, searchQuery, searchable } = useMapFiltersState();
+  const { toggleSection, handleClearFacet, handleOptionToggle } = useMapFiltersDispatch();
 
   const isOpen = openSections[facet.key] ?? true;
   const selectedCount = (selectedFilters[facet.key] || []).length;
