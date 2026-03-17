@@ -1,0 +1,272 @@
+@use '../styles/tokens' as *;
+
+// ─── Page Wrapper ─────────────────────────────────────────────────────────────
+.signup-page {
+  background: var(--background-primary);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+// ─── Outer Section (Hero + Progress) ─────────────────────────────────────────
+.signup-outer {
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+  padding: 16px 32px;
+  background: linear-gradient(135deg, #f4f4f4 70.71%, #fff 0%);
+}
+
+// ─── Hero Banner ──────────────────────────────────────────────────────────────
+.signup-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 31px 24px 32px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #a2191f 70.71%, #da1e28 0%);
+  box-shadow: 0 4px 12px 0 rgba(218, 30, 40, 0.15);
+  text-align: center;
+
+  &__title {
+    color: #fff;
+    font-family: 'Inter', -apple-system, Roboto, Helvetica, sans-serif;
+    font-size: 28px;
+    font-weight: 400;
+    line-height: 1.2;
+    margin: 0;
+  }
+
+  &__subtitle {
+    color: rgba(255, 255, 255, 0.95);
+    font-family: 'Inter', -apple-system, Roboto, Helvetica, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.5;
+    margin: 0;
+    max-width: 480px;
+  }
+}
+
+// ─── Progress Bar ─────────────────────────────────────────────────────────────
+.signup-progress {
+  border-radius: 4px;
+  border-top: 1px solid var(--interactive-primary);
+  background: var(--background-secondary);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.1);
+  padding: 18px;
+}
+
+// ─── Warning Banner ───────────────────────────────────────────────────────────
+.signup-warning {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 13px 34px;
+  background: #fff4b4;
+  border: 1px solid #000;
+  gap: var(--spacing-05);
+
+  &__left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+  }
+
+  &__text {
+    color: #946c00;
+    font-family: 'Inter', -apple-system, Roboto, Helvetica, sans-serif;
+    font-size: 14px;
+    line-height: 22px;
+    font-weight: 400;
+  }
+
+  &__dismiss {
+    flex-shrink: 0;
+    color: #946c00;
+    font-family: 'Inter', -apple-system, Roboto, Helvetica, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 22px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+
+    &:hover { text-decoration: underline; }
+
+    &:focus-visible {
+      outline: 2px solid #946c00;
+      outline-offset: 2px;
+      border-radius: 2px;
+    }
+  }
+}
+
+// ─── Form Card ────────────────────────────────────────────────────────────────
+.signup-form-card {
+  flex: 1;
+  padding: 24px;
+  border-top: 5px solid #fb0c0c;
+  background: var(--background-secondary);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+// ─── Shared Step Layout (used by every step component) ────────────────────────
+.signup-step {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-06);
+  padding-bottom: var(--spacing-05);
+}
+
+.signup-step-header {
+  border-bottom: 1px solid var(--interactive-primary);
+  padding-bottom: 11px;
+}
+
+.signup-step-title {
+  color: var(--text-primary);
+  font-family: 'Inter', -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.signup-step-description {
+  color: var(--text-secondary);
+  font-family: 'Inter', -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.signup-step-error {
+  color: var(--text-error);
+  font-size: var(--body-sm-size);
+  font-weight: var(--font-weight-regular);
+  margin: 0;
+}
+
+// ─── Navigation Footer ────────────────────────────────────────────────────────
+.signup-form-footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 15px;
+  padding-top: 26px;
+  border-top: 1px solid var(--interactive-primary);
+  margin-top: var(--spacing-03);
+}
+
+// ─── Button Overrides ─────────────────────────────────────────────────────────
+// Cancel — tertiary blue outline (Figma spec)
+.signup-btn-cancel.cds--btn--tertiary {
+  border-color: #0f62fe !important;
+  color: #0f62fe !important;
+  background: transparent !important;
+
+  &:hover { background: rgba(15, 98, 254, 0.1) !important; }
+}
+
+// Back — dark charcoal secondary
+.signup-btn-back.cds--btn--secondary {
+  background-color: #393939 !important;
+
+  &:hover { background-color: #4c4c4c !important; }
+}
+
+// Next / Submit — brand red primary
+.signup-btn-next.cds--btn--primary {
+  background-color: var(--interactive-primary) !important;
+
+  &:hover { background-color: var(--interactive-hover) !important; }
+}
+
+// ─── Carbon Form Field Overrides ──────────────────────────────────────────────
+.signup-form-card {
+  .cds--label {
+    font-weight: var(--font-weight-bold);
+    color: var(--text-primary);
+  }
+
+  .cds--text-input,
+  .cds--select-input,
+  .cds--number__input-wrapper input {
+    background-color: var(--field-background) !important;
+    color: var(--field-text) !important;
+  }
+
+  .cds--form-item,
+  .cds--text-input-wrapper,
+  .cds--select,
+  .cds--number,
+  .cds--date-picker {
+    width: 100%;
+  }
+}
+
+// ─── Dark Mode ────────────────────────────────────────────────────────────────
+:root[data-carbon-theme="g90"],
+:root[data-carbon-theme="g100"] {
+  .signup-outer {
+    background: linear-gradient(135deg, var(--background-secondary) 70.71%, var(--background-primary) 0%);
+  }
+
+  .signup-form-card {
+    border-top-color: var(--interactive-primary);
+  }
+
+  .signup-warning {
+    background: rgba(255, 244, 180, 0.15);
+    border-color: #946c00;
+  }
+}
+
+// ─── Responsive ───────────────────────────────────────────────────────────────
+@media (max-width: 671px) {
+  .signup-outer {
+    padding: 12px 16px;
+    gap: 20px;
+  }
+
+  .signup-hero {
+    padding: 24px 16px;
+
+    &__title { font-size: 22px; }
+    &__subtitle { font-size: 14px; }
+  }
+
+  .signup-form-card {
+    padding: 16px;
+  }
+
+  .signup-warning {
+    padding: 12px 16px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-03);
+  }
+
+  .signup-form-footer {
+    flex-direction: column-reverse;
+    align-items: stretch;
+
+    .cds--btn {
+      width: 100%;
+      max-width: none;
+      justify-content: center;
+    }
+  }
+}
+
+@media (min-width: 672px) and (max-width: 1055px) {
+  .signup-outer {
+    padding: 16px 24px;
+  }
+}
