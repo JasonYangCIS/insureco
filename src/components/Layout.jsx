@@ -14,7 +14,6 @@ import {
   SkipToContent,
   SideNav,
   SideNavItems,
-  SideNavLink,
   SideNavMenu,
   SideNavMenuItem,
 } from "@carbon/react";
@@ -31,13 +30,11 @@ export default function Layout({ children }) {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Remove padding for landing page
   const isLandingPage = location.pathname === '/';
 
   return (
     <HeaderContainer
       render={({ isSideNavExpanded, onClickSideNavExpand }) => {
-        // Helper function to handle navigation and close menu
         const handleNavigateAndClose = (path) => {
           navigate(path);
           if (isSideNavExpanded) {
@@ -66,7 +63,6 @@ export default function Layout({ children }) {
                   Dashboard
                 </HeaderMenuItem>
 
-                {/* Business Menu with Dropdown */}
                 <HeaderMenu aria-label="Business" menuLinkName="Business">
                   <HeaderMenuItem element={Link} to="/business/dashboard">
                     Overview
@@ -88,6 +84,10 @@ export default function Layout({ children }) {
                   </HeaderMenuItem>
                 </HeaderMenu>
 
+                <HeaderMenuItem onClick={() => navigate("/analytics")}>
+                  Analytics
+                </HeaderMenuItem>
+
                 <HeaderMenuItem onClick={() => navigate("/login")}>
                   Login
                 </HeaderMenuItem>
@@ -99,10 +99,10 @@ export default function Layout({ children }) {
                 </HeaderMenuItem>
               </HeaderNavigation>
               <HeaderGlobalBar>
-                <HeaderGlobalAction aria-label="Search">
+                <HeaderGlobalAction aria-label="Search" tooltipAlignment="center">
                   <Search size={20} />
                 </HeaderGlobalAction>
-                <HeaderGlobalAction aria-label="Notifications">
+                <HeaderGlobalAction aria-label="Notifications" tooltipAlignment="center">
                   <Notification size={20} />
                 </HeaderGlobalAction>
                 <ThemeToggle />
@@ -128,7 +128,6 @@ export default function Layout({ children }) {
                       Dashboard
                     </HeaderMenuItem>
 
-                    {/* Business Section in Sidebar with Submenu */}
                     <SideNavMenu title="Business">
                       <SideNavMenuItem
                         element={Link}
@@ -174,6 +173,10 @@ export default function Layout({ children }) {
                       </SideNavMenuItem>
                     </SideNavMenu>
 
+                    <HeaderMenuItem onClick={() => handleNavigateAndClose("/analytics")}>
+                      Analytics
+                    </HeaderMenuItem>
+
                     <HeaderMenuItem onClick={() => handleNavigateAndClose("/login")}>
                       Login
                     </HeaderMenuItem>
@@ -192,7 +195,7 @@ export default function Layout({ children }) {
               className="cds--content"
               style={{
                 minHeight: "100vh",
-                padding: isLandingPage ? 0 : undefined
+                padding: isLandingPage ? 0 : undefined,
               }}
             >
               {children}

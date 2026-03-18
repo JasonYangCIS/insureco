@@ -20,6 +20,8 @@ import AddVehiclePage from "./pages/business/AddVehiclePage";
 import FileClaimPage from "./pages/business/FileClaimPage";
 import MakePaymentPage from "./pages/business/MakePaymentPage";
 import MapPage from "./pages/business/MapPage";
+import ConservativeDashboard from "./pages/dashboards/ConservativeDashboard";
+import ConservativeAssetDetail from "./pages/dashboards/ConservativeAssetDetail";
 
 export default function App() {
   return (
@@ -48,6 +50,15 @@ export default function App() {
         <Route path="/business/payments" element={<BusinessComingSoon />} />
         <Route path="/business/file-claim" element={<FileClaimPage />} />
         <Route path="/business/make-payment" element={<MakePaymentPage />} />
+
+        {/* Financial Analytics Dashboard */}
+        <Route path="/analytics" element={<ConservativeDashboard />} />
+        <Route path="/analytics/:assetId" element={<ConservativeAssetDetail />} />
+
+        {/* Legacy redirects */}
+        <Route path="/dashboards" element={<Navigate to="/analytics" replace />} />
+        <Route path="/dashboard-conservative" element={<Navigate to="/analytics" replace />} />
+        <Route path="/dashboard-conservative/:assetId" element={<Navigate to="/analytics" replace />} />
       </Routes>
     </Layout>
   );
